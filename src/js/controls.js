@@ -6,17 +6,49 @@
 import captions from './captions';
 import html5 from './html5';
 import support from './support';
-import { repaint, transitionEndEvent } from './utils/animation';
-import { dedupe } from './utils/arrays';
+import {
+    repaint,
+    transitionEndEvent
+} from './utils/animation';
+import {
+    dedupe
+} from './utils/arrays';
 import browser from './utils/browser';
-import { createElement, emptyElement, getAttributesFromSelector, getElement, getElements, hasClass, matches, removeElement, setAttributes, setFocus, toggleClass, toggleHidden } from './utils/elements';
-import { off, on } from './utils/events';
+import {
+    createElement,
+    emptyElement,
+    getAttributesFromSelector,
+    getElement,
+    getElements,
+    hasClass,
+    matches,
+    removeElement,
+    setAttributes,
+    setFocus,
+    toggleClass,
+    toggleHidden
+} from './utils/elements';
+import {
+    off,
+    triggerEvent,
+    on
+} from './utils/events';
 import i18n from './utils/i18n';
 import is from './utils/is';
 import loadSprite from './utils/loadSprite';
-import { extend } from './utils/objects';
-import { getPercentage, replaceAll, toCamelCase, toTitleCase } from './utils/strings';
-import { formatTime, getHours } from './utils/time';
+import {
+    extend
+} from './utils/objects';
+import {
+    getPercentage,
+    replaceAll,
+    toCamelCase,
+    toTitleCase
+} from './utils/strings';
+import {
+    formatTime,
+    getHours
+} from './utils/time';
 
 // TODO: Don't export a massive object - break down and create class
 const controls = {
@@ -145,8 +177,7 @@ const controls = {
 
         badge.appendChild(
             createElement(
-                'span',
-                {
+                'span', {
                     class: this.config.classNames.menu.badge,
                 },
                 text,
@@ -297,8 +328,7 @@ const controls = {
         const input = createElement(
             'input',
             extend(
-                getAttributesFromSelector(this.config.selectors.inputs[type]),
-                {
+                getAttributesFromSelector(this.config.selectors.inputs[type]), {
                     type: 'range',
                     min: 0,
                     max: 100,
@@ -329,8 +359,7 @@ const controls = {
         const progress = createElement(
             'progress',
             extend(
-                getAttributesFromSelector(this.config.selectors.display[type]),
-                {
+                getAttributesFromSelector(this.config.selectors.display[type]), {
                     min: 0,
                     max: 100,
                     value: 0,
@@ -348,7 +377,7 @@ const controls = {
             const suffixKey = {
                 played: 'played',
                 buffer: 'buffered',
-            }[type];
+            } [type];
             const suffix = suffixKey ? i18n.get(suffixKey, this.config) : '';
 
             progress.innerText = `% ${suffix.toLowerCase()}`;
@@ -443,7 +472,14 @@ const controls = {
     },
 
     // Create a settings menu item
-    createMenuItem({ value, list, type, title, badge = null, checked = false }) {
+    createMenuItem({
+        value,
+        list,
+        type,
+        title,
+        badge = null,
+        checked = false
+    }) {
         const attributes = getAttributesFromSelector(this.config.selectors.inputs[type]);
 
         const menuItem = createElement(
@@ -616,11 +652,17 @@ const controls = {
                     // Set seek range value only if it's a 'natural' time event
                     if (event.type === 'timeupdate') {
                         controls.setRange.call(this, this.elements.inputs.seek, value);
+
+                        // FIXME: EXTEND Time is up
+                        if ((this.currentTime == this.duration) || (this.currentTime - this.duration) >= 0.5) {
+                            triggerEvent.call(this, this.media, 'ended');
+                            this.restart();
+                        }
                     }
 
                     break;
 
-                // Check buffer status
+                    // Check buffer status
                 case 'playing':
                 case 'progress':
                     setProgress(this.elements.display.buffer, this.buffered * 100);
@@ -1079,7 +1121,9 @@ const controls = {
 
     // Check if we need to hide/show the settings menu
     checkMenu() {
-        const { buttons } = this.elements.settings;
+        const {
+            buttons
+        } = this.elements.settings;
         const visible = !is.empty(buttons) && Object.values(buttons).some(button => !button.hidden);
 
         toggleHidden(this.elements.settings.menu, !visible);
@@ -1104,7 +1148,9 @@ const controls = {
 
     // Show/hide menu
     toggleMenu(input) {
-        const { popup } = this.elements.settings;
+        const {
+            popup
+        } = this.elements.settings;
         const button = this.elements.buttons.settings;
 
         // Menu and button are required
@@ -1113,7 +1159,9 @@ const controls = {
         }
 
         // True toggle by default
-        const { hidden } = popup;
+        const {
+            hidden
+        } = popup;
         let show = hidden;
 
         if (is.boolean(input)) {
@@ -1285,8 +1333,7 @@ const controls = {
             // Seek tooltip
             if (this.config.tooltips.seek) {
                 const tooltip = createElement(
-                    'span',
-                    {
+                    'span', {
                         class: this.config.classNames.tooltip,
                     },
                     '00:00',
@@ -1438,8 +1485,7 @@ const controls = {
                 // Visible label
                 backButton.appendChild(
                     createElement(
-                        'span',
-                        {
+                        'span', {
                             'aria-hidden': true,
                         },
                         i18n.get(type, this.config),
@@ -1449,8 +1495,7 @@ const controls = {
                 // Screen reader label
                 backButton.appendChild(
                     createElement(
-                        'span',
-                        {
+                        'span', {
                             class: this.config.classNames.hidden,
                         },
                         i18n.get('menuBack', this.config),
@@ -1524,7 +1569,9 @@ const controls = {
                 target: '_blank',
             };
 
-            const { download } = this.config.urls;
+            const {
+                download
+            } = this.config.urls;
 
             if (!is.url(download) && this.isEmbed) {
                 extend(attributes, {
@@ -1688,7 +1735,10 @@ const controls = {
 
         // Setup tooltips
         if (this.config.tooltips.controls) {
-            const { classNames, selectors } = this.config;
+            const {
+                classNames,
+                selectors
+            } = this.config;
             const selector = `${selectors.controls.wrapper} ${selectors.labels} .${classNames.hidden}`;
             const labels = getElements.call(this, selector);
 

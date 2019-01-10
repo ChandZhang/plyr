@@ -7,8 +7,14 @@
 
 import captions from './captions';
 import defaults from './config/defaults';
-import { pip } from './config/states';
-import { getProviderByUrl, providers, types } from './config/types';
+import {
+    pip
+} from './config/states';
+import {
+    getProviderByUrl,
+    providers,
+    types
+} from './config/types';
 import Console from './console';
 import controls from './controls';
 import Fullscreen from './fullscreen';
@@ -19,16 +25,36 @@ import source from './source';
 import Storage from './storage';
 import support from './support';
 import ui from './ui';
-import { closest } from './utils/arrays';
-import { createElement, hasClass, removeElement, replaceElement, toggleClass, wrap } from './utils/elements';
-import { off, on, once, triggerEvent, unbindListeners } from './utils/events';
+import {
+    closest
+} from './utils/arrays';
+import {
+    createElement,
+    hasClass,
+    removeElement,
+    replaceElement,
+    toggleClass,
+    wrap
+} from './utils/elements';
+import {
+    off,
+    on,
+    once,
+    triggerEvent,
+    unbindListeners
+} from './utils/events';
 import is from './utils/is';
 import loadSprite from './utils/loadSprite';
-import { cloneDeep, extend } from './utils/objects';
-import { parseUrl } from './utils/urls';
+import {
+    cloneDeep,
+    extend
+} from './utils/objects';
+import {
+    parseUrl
+} from './utils/urls';
 
 // Private properties
-// TODO: Use a WeakMap for private globals
+// Use a WeakMap for private globals
 // const globals = new WeakMap();
 
 // Plyr instance
@@ -59,8 +85,7 @@ class Plyr {
         }
 
         // Set config
-        this.config = extend(
-            {},
+        this.config = extend({},
             defaults,
             Plyr.defaults,
             options || {},
@@ -108,7 +133,7 @@ class Plyr {
         };
 
         // Debugging
-        // TODO: move to globals
+        // move to globals
         this.debug = new Console(this.config.debug);
 
         // Log config options and support
@@ -183,11 +208,11 @@ class Plyr {
                             this.config.loop.active = true;
                         }
 
-                        // TODO: replace fullscreen.iosNative with this playsinline config option
+                        // replace fullscreen.iosNative with this playsinline config option
                         // YouTube requires the playsinline in the URL
                         if (this.isYouTube) {
                             this.config.playsinline = truthy.includes(url.searchParams.get('playsinline'));
-                            this.config.hl = url.searchParams.get('hl'); // TODO: Should this be setting language?
+                            this.config.hl = url.searchParams.get('hl'); // Should this be setting language?
                         } else {
                             this.config.playsinline = true;
                         }
@@ -306,6 +331,11 @@ class Plyr {
 
         // Seek time will be recorded (in listeners.js) so we can prevent hiding controls for a few seconds after seek
         this.lastSeekTime = 0;
+
+        //****************************************************************************
+        // FIXME: EXTEND startTime
+        this.startTime = this.config.startTime || 0;
+        //****************************************************************************
     }
 
     // ---------------------------------------
@@ -449,29 +479,39 @@ class Plyr {
         if (!this.duration) {
             return;
         }
-
+        // FIXME: EXTEND currentTime
+        if (!this.media) {
+            return;
+        }
         // Validate input
         const inputIsValid = is.number(input) && input > 0;
 
         // Set
-        this.media.currentTime = inputIsValid ? Math.min(input, this.duration) : 0;
+        this.media.currentTime = (inputIsValid ? Math.min(input, this.duration) : 0) + this.startTime;
 
         // Logging
         this.debug.log(`Seeking to ${this.currentTime} seconds`);
+
     }
 
     /**
      * Get current time
      */
     get currentTime() {
-        return Number(this.media.currentTime);
+        // FIXME: EXTEND currentTime
+        if (!this.media) {
+            return 0;
+        }
+        return Number(this.media.currentTime) - this.startTime;
     }
 
     /**
      * Get buffered
      */
     get buffered() {
-        const { buffered } = this.media;
+        const {
+            buffered
+        } = this.media;
 
         // YouTube / Vimeo return a float between 0-1
         if (is.number(buffered)) {
@@ -479,7 +519,7 @@ class Plyr {
         }
 
         // HTML5
-        // TODO: Handle buffered chunks of the media
+        // Handle buffered chunks of the media
         // (i.e. seek to another section buffers only that section)
         if (buffered && buffered.length && this.duration > 0) {
             return buffered.end(0) / this.duration;
@@ -530,7 +570,9 @@ class Plyr {
 
         // Use config if all else fails
         if (!is.number(volume)) {
-            ({ volume } = this.config);
+            ({
+                volume
+            } = this.config);
         }
 
         // Maximum is volumeMax
@@ -715,7 +757,9 @@ class Plyr {
 
         // Save to storage
         if (updateStorage) {
-            this.storage.set({ quality });
+            this.storage.set({
+                quality
+            });
         }
     }
 
@@ -728,7 +772,7 @@ class Plyr {
 
     /**
      * Toggle loop
-     * TODO: Finish fancy new logic. Set the indicator on load as user may pass loop as config
+     * Finish fancy new logic. Set the indicator on load as user may pass loop as config
      * @param {boolean} input - Whether to loop or not
      */
     set loop(input) {
@@ -806,7 +850,9 @@ class Plyr {
      * Get a download URL (either source or custom)
      */
     get download() {
-        const { download } = this.config.urls;
+        const {
+            download
+        } = this.config.urls;
 
         return is.url(download) ? download : this.source;
     }
@@ -871,7 +917,10 @@ class Plyr {
      * Get the current caption track index (-1 if disabled)
      */
     get currentTrack() {
-        const { toggled, currentTrack } = this.captions;
+        const {
+            toggled,
+            currentTrack
+        } = this.captions;
         return toggled ? currentTrack : -1;
     }
 
@@ -893,8 +942,8 @@ class Plyr {
 
     /**
      * Toggle picture-in-picture playback on WebKit/MacOS
-     * TODO: update player with state, support, enabled
-     * TODO: detect outside changes
+     * update player with state, support, enabled
+     * detect outside changes
      */
     set pip(input) {
         // Bail if no support
@@ -940,7 +989,7 @@ class Plyr {
 
     /**
      * Trigger the airplay dialog
-     * TODO: update player with state, support, enabled
+     * update player with state, support, enabled
      */
     airplay() {
         // Show dialog if supported

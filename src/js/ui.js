@@ -6,8 +6,14 @@ import captions from './captions';
 import controls from './controls';
 import support from './support';
 import browser from './utils/browser';
-import { getElement, toggleClass } from './utils/elements';
-import { ready, triggerEvent } from './utils/events';
+import {
+    getElement,
+    toggleClass
+} from './utils/elements';
+import {
+    ready,
+    triggerEvent
+} from './utils/events';
 import i18n from './utils/i18n';
 import is from './utils/is';
 import loadImage from './utils/loadImage';
@@ -175,32 +181,32 @@ const ui = {
         // Wait until ui is ready
         return (
             ready
-                .call(this)
-                // Load image
-                .then(() => loadImage(poster))
-                .catch(err => {
-                    // Hide poster on error unless it's been set by another call
-                    if (poster === this.poster) {
-                        ui.togglePoster.call(this, false);
-                    }
-                    // Rethrow
-                    throw err;
-                })
-                .then(() => {
-                    // Prevent race conditions
-                    if (poster !== this.poster) {
-                        throw new Error('setPoster cancelled by later call to setPoster');
-                    }
-                })
-                .then(() => {
-                    Object.assign(this.elements.poster.style, {
-                        backgroundImage: `url('${poster}')`,
-                        // Reset backgroundSize as well (since it can be set to "cover" for padded thumbnails for youtube)
-                        backgroundSize: '',
-                    });
-                    ui.togglePoster.call(this, true);
-                    return poster;
-                })
+            .call(this)
+            // Load image
+            .then(() => loadImage(poster))
+            .catch(err => {
+                // Hide poster on error unless it's been set by another call
+                if (poster === this.poster) {
+                    ui.togglePoster.call(this, false);
+                }
+                // Rethrow
+                throw err;
+            })
+            .then(() => {
+                // Prevent race conditions
+                if (poster !== this.poster) {
+                    throw new Error('setPoster cancelled by later call to setPoster');
+                }
+            })
+            .then(() => {
+                Object.assign(this.elements.poster.style, {
+                    backgroundImage: `url('${poster}')`,
+                    // Reset backgroundSize as well (since it can be set to "cover" for padded thumbnails for youtube)
+                    backgroundSize: '',
+                });
+                ui.togglePoster.call(this, true);
+                return poster;
+            })
         );
     },
 
@@ -244,7 +250,13 @@ const ui = {
 
     // Toggle controls based on state and `force` argument
     toggleControls(force) {
-        const { controls } = this.elements;
+        //FIXME: elements is undefined
+        if (!this.elements) {
+            return;
+        }
+        const {
+            controls
+        } = this.elements;
 
         if (controls && this.config.hideControls) {
             // Don't hide controls if a touch-device user recently seeked. (Must be limited to touch devices, or it occasionally prevents desktop controls from hiding.)

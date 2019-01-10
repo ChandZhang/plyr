@@ -1,7 +1,7 @@
 // ==========================================================================
 // Plyr default config
 // ==========================================================================
-
+// TODO: default config
 const defaults = {
     // Disable
     enabled: true,
@@ -19,14 +19,14 @@ const defaults = {
     autopause: true,
 
     // Allow inline playback on iOS (this effects YouTube/Vimeo - HTML5 requires the attribute present)
-    // TODO: Remove iosNative fullscreen option in favour of this (logic needs work)
+    //  Remove iosNative fullscreen option in favour of this (logic needs work)
     playsinline: true,
 
     // Default time to skip when rewind/fast forward
     seekTime: 10,
 
     // Default volume
-    volume: 1,
+    volume: 0.8,
     muted: false,
 
     // Pass a custom duration
@@ -37,7 +37,7 @@ const defaults = {
     displayDuration: true,
 
     // Invert the current time to be a countdown
-    invertTime: true,
+    invertTime: false,
 
     // Clicking the currentTime inverts it's value to show time left rather than elapsed
     toggleInvert: true,
@@ -46,10 +46,10 @@ const defaults = {
     ratio: '16:9',
 
     // Click video container to play/pause
-    clickToPlay: true,
+    clickToPlay: false,
 
     // Auto hide the controls
-    hideControls: true,
+    hideControls: false,
 
     // Reset to start when playback ended
     resetOnEnd: false,
@@ -60,14 +60,13 @@ const defaults = {
     // Sprite (for icons)
     loadSprite: true,
     iconPrefix: 'plyr',
-    iconUrl: 'https://cdn.plyr.io/3.4.7/plyr.svg',
-
+    iconUrl: './plyr/plyr.svg',
     // Blank video (used to prevent errors on source change)
-    blankVideo: 'https://cdn.plyr.io/static/blank.mp4',
+    blankVideo: './plyr/blank.mp4',
 
     // Quality default
     quality: {
-        default: 576,
+        default: 720,
         options: [4320, 2880, 2160, 1440, 1080, 720, 576, 480, 360, 240],
     },
 
@@ -130,9 +129,9 @@ const defaults = {
         'mute',
         'volume',
         'captions',
-        'settings',
-        'pip',
-        'airplay',
+        // 'settings',
+        // 'pip',
+        // 'airplay',
         // 'download',
         'fullscreen',
     ],
@@ -194,8 +193,7 @@ const defaults = {
         },
         youtube: {
             sdk: 'https://www.youtube.com/iframe_api',
-            api:
-                'https://www.googleapis.com/youtube/v3/videos?id={0}&key={1}&fields=items(snippet(title))&part=snippet',
+            api: 'https://www.googleapis.com/youtube/v3/videos?id={0}&key={1}&fields=items(snippet(title))&part=snippet',
         },
         googleIMA: {
             sdk: 'https://imasdk.googleapis.com/js/sdkloader/ima3.js',

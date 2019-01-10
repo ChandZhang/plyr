@@ -4,10 +4,23 @@
 
 import controls from './controls';
 import ui from './ui';
-import { repaint } from './utils/animation';
+import {
+    repaint
+} from './utils/animation';
 import browser from './utils/browser';
-import { getElement, getElements, matches, toggleClass, toggleHidden } from './utils/elements';
-import { on, once, toggleListener, triggerEvent } from './utils/events';
+import {
+    getElement,
+    getElements,
+    matches,
+    toggleClass,
+    toggleHidden
+} from './utils/elements';
+import {
+    on,
+    once,
+    toggleListener,
+    triggerEvent
+} from './utils/events';
 import is from './utils/is';
 
 class Listeners {
@@ -25,8 +38,12 @@ class Listeners {
 
     // Handle key presses
     handleKey(event) {
-        const { player } = this;
-        const { elements } = player;
+        const {
+            player
+        } = this;
+        const {
+            elements
+        } = player;
         const code = event.keyCode ? event.keyCode : event.which;
         const pressed = event.type === 'keydown';
         const repeat = pressed && code === this.lastKey;
@@ -56,8 +73,12 @@ class Listeners {
             // and any that accept key input http://webaim.org/techniques/keyboard/
             const focused = document.activeElement;
             if (is.element(focused)) {
-                const { editable } = player.config.selectors;
-                const { seek } = elements.inputs;
+                const {
+                    editable
+                } = player.config.selectors;
+                const {
+                    seek
+                } = elements.inputs;
 
                 if (focused !== seek && matches(focused, editable)) {
                     return;
@@ -67,7 +88,7 @@ class Listeners {
                     return;
                 }
             }
-
+            // FIXME: Keyboard Event
             // Which keycodes should we prevent default
             const preventDefault = [32, 37, 38, 39, 40, 48, 49, 50, 51, 52, 53, 54, 56, 57, 67, 70, 73, 75, 76, 77, 79];
 
@@ -182,8 +203,12 @@ class Listeners {
 
     // Device is touch enabled
     firstTouch() {
-        const { player } = this;
-        const { elements } = player;
+        const {
+            player
+        } = this;
+        const {
+            elements
+        } = player;
 
         player.touch = true;
 
@@ -192,8 +217,12 @@ class Listeners {
     }
 
     setTabFocus(event) {
-        const { player } = this;
-        const { elements } = player;
+        const {
+            player
+        } = this;
+        const {
+            elements
+        } = player;
 
         clearTimeout(this.focusTimer);
 
@@ -241,7 +270,9 @@ class Listeners {
 
     // Global window & document listeners
     global(toggle = true) {
-        const { player } = this;
+        const {
+            player
+        } = this;
 
         // Keyboard shortcuts
         if (player.config.keyboard.global) {
@@ -260,8 +291,12 @@ class Listeners {
 
     // Container listeners
     container() {
-        const { player } = this;
-        const { elements } = player;
+        const {
+            player
+        } = this;
+        const {
+            elements
+        } = player;
 
         // Keyboard shortcuts
         if (!player.config.keyboard.global && player.config.keyboard.focused) {
@@ -274,7 +309,9 @@ class Listeners {
             elements.container,
             'mousemove mouseleave touchstart touchmove enterfullscreen exitfullscreen',
             event => {
-                const { controls } = elements;
+                const {
+                    controls
+                } = elements;
 
                 // Remove button states for fullscreen
                 if (controls && event.type === 'enterfullscreen') {
@@ -304,8 +341,12 @@ class Listeners {
 
     // Listen for media events
     media() {
-        const { player } = this;
-        const { elements } = player;
+        const {
+            player
+        } = this;
+        const {
+            elements
+        } = player;
 
         // Time change on media
         on.call(player, player.media, 'timeupdate seeking seeked', event => controls.timeUpdate.call(player, event));
@@ -422,7 +463,9 @@ class Listeners {
             controls.updateSetting.call(player, 'speed');
 
             // Save to storage
-            player.storage.set({ speed: player.speed });
+            player.storage.set({
+                speed: player.speed
+            });
         });
 
         // Quality change
@@ -441,7 +484,9 @@ class Listeners {
         const proxyEvents = player.config.events.concat(['keyup', 'keydown']).join(' ');
 
         on.call(player, player.media, proxyEvents, event => {
-            let { detail = {} } = event;
+            let {
+                detail = {}
+            } = event;
 
             // Get error details from media
             if (event.type === 'error') {
@@ -454,7 +499,9 @@ class Listeners {
 
     // Run default and custom handlers
     proxy(event, defaultHandler, customHandlerKey) {
-        const { player } = this;
+        const {
+            player
+        } = this;
         const customHandler = player.config.listeners[customHandlerKey];
         const hasCustomHandler = is.function(customHandler);
         let returned = true;
@@ -472,7 +519,9 @@ class Listeners {
 
     // Trigger custom and default handlers
     bind(element, type, defaultHandler, customHandlerKey, passive = true) {
-        const { player } = this;
+        const {
+            player
+        } = this;
         const customHandler = player.config.listeners[customHandlerKey];
         const hasCustomHandler = is.function(customHandler);
 
@@ -487,8 +536,12 @@ class Listeners {
 
     // Listen for control events
     controls() {
-        const { player } = this;
-        const { elements } = player;
+        const {
+            player
+        } = this;
+        const {
+            elements
+        } = player;
 
         // IE doesn't support input event, so we fallback to change
         const inputEvent = browser.isIE ? 'change' : 'input';
@@ -717,7 +770,11 @@ class Listeners {
 
         // Show controls when they receive focus (e.g., when using keyboard tab key)
         this.bind(elements.controls, 'focusin', () => {
-            const { config, elements, timers } = player;
+            const {
+                config,
+                elements,
+                timers
+            } = player;
 
             // Skip transition to prevent focus from scrolling the parent element
             toggleClass(elements.controls, config.classNames.noTransition, true);
@@ -759,7 +816,9 @@ class Listeners {
                 player.increaseVolume(direction / 50);
 
                 // Don't break page scrolling at max and min
-                const { volume } = player.media;
+                const {
+                    volume
+                } = player.media;
                 if ((direction === 1 && volume < 1) || (direction === -1 && volume > 0)) {
                     event.preventDefault();
                 }
