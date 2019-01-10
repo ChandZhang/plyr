@@ -1787,7 +1787,12 @@ typeof navigator === "object" && (function (global, factory) {
             value = getPercentage(this.currentTime, this.duration); // Set seek range value only if it's a 'natural' time event
 
             if (event.type === 'timeupdate') {
-              controls.setRange.call(this, this.elements.inputs.seek, value);
+              controls.setRange.call(this, this.elements.inputs.seek, value); // FIXME: EXTEND Time is up
+
+              if (this.currentTime == this.duration || this.currentTime - this.duration >= 0.5) {
+                triggerEvent.call(this, this.media, 'ended');
+                this.restart();
+              }
             }
 
             break;
@@ -2077,19 +2082,19 @@ typeof navigator === "object" && (function (global, factory) {
         if (!is.element(this.elements.settings.panels.loop)) {
             return;
         }
-         const options = ['start', 'end', 'all', 'reset'];
+          const options = ['start', 'end', 'all', 'reset'];
         const list = this.elements.settings.panels.loop.querySelector('[role="menu"]');
-         // Show the pane and tab
+          // Show the pane and tab
         toggleHidden(this.elements.settings.buttons.loop, false);
         toggleHidden(this.elements.settings.panels.loop, false);
-         // Toggle the pane and tab
+          // Toggle the pane and tab
         const toggle = !is.empty(this.loop.options);
         controls.toggleMenuButton.call(this, 'loop', toggle);
-         // Empty the menu
+          // Empty the menu
         emptyElement(list);
-         options.forEach(option => {
+          options.forEach(option => {
             const item = createElement('li');
-             const button = createElement(
+              const button = createElement(
                 'button',
                 extend(getAttributesFromSelector(this.config.selectors.buttons.loop), {
                     type: 'button',
@@ -2098,11 +2103,11 @@ typeof navigator === "object" && (function (global, factory) {
                 }),
                 i18n.get(option, this.config)
             );
-             if (['start', 'end'].includes(option)) {
+              if (['start', 'end'].includes(option)) {
                 const badge = controls.createBadge.call(this, '00:00');
                 button.appendChild(badge);
             }
-             item.appendChild(button);
+              item.appendChild(button);
             list.appendChild(item);
         });
     }, */
@@ -2622,7 +2627,7 @@ typeof navigator === "object" && (function (global, factory) {
       var update = true; // If function, run it and use output
 
       if (is.function(this.config.controls)) {
-        this.config.controls = this.config.controls.call(this.props);
+        this.config.controls = this.config.controls.call(this, props);
       } // Convert falsy controls to empty array (primarily for empty strings)
 
 
@@ -3144,6 +3149,7 @@ typeof navigator === "object" && (function (global, factory) {
   // ==========================================================================
   // Plyr default config
   // ==========================================================================
+  // TODO: default config
   var defaults = {
     // Disable
     enabled: true,
@@ -3156,12 +3162,12 @@ typeof navigator === "object" && (function (global, factory) {
     // Only allow one media playing at once (vimeo only)
     autopause: true,
     // Allow inline playback on iOS (this effects YouTube/Vimeo - HTML5 requires the attribute present)
-    // TODO: Remove iosNative fullscreen option in favour of this (logic needs work)
+    //  Remove iosNative fullscreen option in favour of this (logic needs work)
     playsinline: true,
     // Default time to skip when rewind/fast forward
     seekTime: 10,
     // Default volume
-    volume: 1,
+    volume: 0.8,
     muted: false,
     // Pass a custom duration
     duration: null,
@@ -3169,15 +3175,15 @@ typeof navigator === "object" && (function (global, factory) {
     // If you have opted to display both duration and currentTime, this is ignored
     displayDuration: true,
     // Invert the current time to be a countdown
-    invertTime: true,
+    invertTime: false,
     // Clicking the currentTime inverts it's value to show time left rather than elapsed
     toggleInvert: true,
     // Aspect ratio (for embeds)
     ratio: '16:9',
     // Click video container to play/pause
-    clickToPlay: true,
+    clickToPlay: false,
     // Auto hide the controls
-    hideControls: true,
+    hideControls: false,
     // Reset to start when playback ended
     resetOnEnd: false,
     // Disable the standard context menu
@@ -3185,12 +3191,12 @@ typeof navigator === "object" && (function (global, factory) {
     // Sprite (for icons)
     loadSprite: true,
     iconPrefix: 'plyr',
-    iconUrl: 'https://cdn.plyr.io/3.4.7/plyr.svg',
+    iconUrl: './plyr/plyr.svg',
     // Blank video (used to prevent errors on source change)
-    blankVideo: 'https://cdn.plyr.io/static/blank.mp4',
+    blankVideo: './plyr/blank.mp4',
     // Quality default
     quality: {
-      default: 576,
+      default: 720,
       options: [4320, 2880, 2160, 1440, 1080, 720, 576, 480, 360, 240]
     },
     // Set loops
@@ -3240,7 +3246,10 @@ typeof navigator === "object" && (function (global, factory) {
     controls: ['play-large', // 'restart',
     // 'rewind',
     'play', // 'fast-forward',
-    'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', // 'download',
+    'progress', 'current-time', 'mute', 'volume', 'captions', // 'settings',
+    // 'pip',
+    // 'airplay',
+    // 'download',
     'fullscreen'],
     settings: ['captions', 'quality', 'speed'],
     // Localisation
@@ -3995,6 +4004,11 @@ typeof navigator === "object" && (function (global, factory) {
     },
     // Toggle controls based on state and `force` argument
     toggleControls: function toggleControls(force) {
+      //FIXME: elements is undefined
+      if (!this.elements) {
+        return;
+      }
+
       var controls$$1 = this.elements.controls;
 
       if (controls$$1 && this.config.hideControls) {
@@ -4067,7 +4081,8 @@ typeof navigator === "object" && (function (global, factory) {
             if (event.which === 32 && matches(focused, 'button, [role^="menuitem"]')) {
               return;
             }
-          } // Which keycodes should we prevent default
+          } // FIXME: Keyboard Event
+          // Which keycodes should we prevent default
 
 
           var preventDefault = [32, 37, 38, 39, 40, 48, 49, 50, 51, 52, 53, 54, 56, 57, 67, 70, 73, 75, 76, 77, 79]; // If the code is found prevent default (e.g. prevent scrolling for arrows)
@@ -4845,8 +4860,8 @@ typeof navigator === "object" && (function (global, factory) {
           if (!e.sheet.cssText.length) result = 'e';
         } catch (x) {
           // sheets objects created from load errors don't allow access to
-          // `cssText`
-          result = 'e';
+          // `cssText` (unless error is Code:18 SecurityError)
+          if (x.code != 18) result = 'e';
         }
       }
 
@@ -6579,7 +6594,7 @@ typeof navigator === "object" && (function (global, factory) {
     }
   };
 
-  // TODO: Use a WeakMap for private globals
+  // Use a WeakMap for private globals
   // const globals = new WeakMap();
   // Plyr instance
 
@@ -6649,7 +6664,7 @@ typeof navigator === "object" && (function (global, factory) {
         speed: [],
         quality: []
       }; // Debugging
-      // TODO: move to globals
+      // move to globals
 
       this.debug = new Console(this.config.debug); // Log config options and support
 
@@ -6715,13 +6730,13 @@ typeof navigator === "object" && (function (global, factory) {
 
               if (truthy.includes(url.searchParams.get('loop'))) {
                 this.config.loop.active = true;
-              } // TODO: replace fullscreen.iosNative with this playsinline config option
+              } // replace fullscreen.iosNative with this playsinline config option
               // YouTube requires the playsinline in the URL
 
 
               if (this.isYouTube) {
                 this.config.playsinline = truthy.includes(url.searchParams.get('playsinline'));
-                this.config.hl = url.searchParams.get('hl'); // TODO: Should this be setting language?
+                this.config.hl = url.searchParams.get('hl'); // Should this be setting language?
               } else {
                 this.config.playsinline = true;
               }
@@ -6830,7 +6845,10 @@ typeof navigator === "object" && (function (global, factory) {
       } // Seek time will be recorded (in listeners.js) so we can prevent hiding controls for a few seconds after seek
 
 
-      this.lastSeekTime = 0;
+      this.lastSeekTime = 0; //****************************************************************************
+      // FIXME: EXTEND startTime
+
+      this.startTime = this.config.startTime || 0; //****************************************************************************
     } // ---------------------------------------
     // API
     // ---------------------------------------
@@ -6982,7 +7000,7 @@ typeof navigator === "object" && (function (global, factory) {
 
       /**
        * Trigger the airplay dialog
-       * TODO: update player with state, support, enabled
+       * update player with state, support, enabled
        */
       value: function airplay() {
         // Show dialog if supported
@@ -7237,12 +7255,17 @@ typeof navigator === "object" && (function (global, factory) {
         // Bail if media duration isn't available yet
         if (!this.duration) {
           return;
+        } // FIXME: EXTEND currentTime
+
+
+        if (!this.media) {
+          return;
         } // Validate input
 
 
         var inputIsValid = is.number(input) && input > 0; // Set
 
-        this.media.currentTime = inputIsValid ? Math.min(input, this.duration) : 0; // Logging
+        this.media.currentTime = (inputIsValid ? Math.min(input, this.duration) : 0) + this.startTime; // Logging
 
         this.debug.log("Seeking to ".concat(this.currentTime, " seconds"));
       }
@@ -7251,7 +7274,12 @@ typeof navigator === "object" && (function (global, factory) {
        */
       ,
       get: function get() {
-        return Number(this.media.currentTime);
+        // FIXME: EXTEND currentTime
+        if (!this.media) {
+          return 0;
+        }
+
+        return Number(this.media.currentTime) - this.startTime;
       }
       /**
        * Get buffered
@@ -7265,7 +7293,7 @@ typeof navigator === "object" && (function (global, factory) {
         if (is.number(buffered)) {
           return buffered;
         } // HTML5
-        // TODO: Handle buffered chunks of the media
+        // Handle buffered chunks of the media
         // (i.e. seek to another section buffers only that section)
 
 
@@ -7491,7 +7519,7 @@ typeof navigator === "object" && (function (global, factory) {
       }
       /**
        * Toggle loop
-       * TODO: Finish fancy new logic. Set the indicator on load as user may pass loop as config
+       * Finish fancy new logic. Set the indicator on load as user may pass loop as config
        * @param {boolean} input - Whether to loop or not
        */
 
@@ -7503,7 +7531,7 @@ typeof navigator === "object" && (function (global, factory) {
         this.media.loop = toggle; // Set default to be a true toggle
 
         /* const type = ['start', 'end', 'all', 'none', 'toggle'].includes(input) ? input : 'toggle';
-         switch (type) {
+          switch (type) {
             case 'start':
                 if (this.config.loop.end && this.config.loop.end <= this.currentTime) {
                     this.config.loop.end = null;
@@ -7511,20 +7539,20 @@ typeof navigator === "object" && (function (global, factory) {
                 this.config.loop.start = this.currentTime;
                 // this.config.loop.indicator.start = this.elements.display.played.value;
                 break;
-             case 'end':
+              case 'end':
                 if (this.config.loop.start >= this.currentTime) {
                     return this;
                 }
                 this.config.loop.end = this.currentTime;
                 // this.config.loop.indicator.end = this.elements.display.played.value;
                 break;
-             case 'all':
+              case 'all':
                 this.config.loop.start = 0;
                 this.config.loop.end = this.duration - 2;
                 this.config.loop.indicator.start = 0;
                 this.config.loop.indicator.end = 100;
                 break;
-             case 'toggle':
+              case 'toggle':
                 if (this.config.loop.active) {
                     this.config.loop.start = 0;
                     this.config.loop.end = null;
@@ -7533,7 +7561,7 @@ typeof navigator === "object" && (function (global, factory) {
                     this.config.loop.end = this.duration - 2;
                 }
                 break;
-             default:
+              default:
                 this.config.loop.start = 0;
                 this.config.loop.end = null;
                 break;
@@ -7652,8 +7680,8 @@ typeof navigator === "object" && (function (global, factory) {
       }
       /**
        * Toggle picture-in-picture playback on WebKit/MacOS
-       * TODO: update player with state, support, enabled
-       * TODO: detect outside changes
+       * update player with state, support, enabled
+       * detect outside changes
        */
 
     }, {
