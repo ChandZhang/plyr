@@ -3,13 +3,22 @@
 // ==========================================================================
 
 import ui from '../ui';
-import { createElement, replaceElement, toggleClass } from '../utils/elements';
-import { triggerEvent } from '../utils/events';
+import {
+    createElement,
+    replaceElement,
+    toggleClass
+} from '../utils/elements';
+import {
+    triggerEvent
+} from '../utils/events';
 import fetch from '../utils/fetch';
 import is from '../utils/is';
 import loadImage from '../utils/loadImage';
 import loadScript from '../utils/loadScript';
-import { format, generateId } from '../utils/strings';
+import {
+    format,
+    generateId
+} from '../utils/strings';
 
 // Parse YouTube ID from URL
 function parseId(url) {
@@ -73,7 +82,9 @@ const youtube = {
         // This method disappears now and then though...
         // https://github.com/sampotts/plyr/issues/709
         if (is.function(this.embed.getVideoData)) {
-            const { title } = this.embed.getVideoData();
+            const {
+                title
+            } = this.embed.getVideoData();
 
             if (is.empty(title)) {
                 this.config.title = title;
@@ -127,10 +138,15 @@ const youtube = {
         const id = generateId(player.provider);
 
         // Get poster, if already set
-        const { poster } = player;
+        const {
+            poster
+        } = player;
 
         // Replace media element
-        const container = createElement('div', { id, poster });
+        const container = createElement('div', {
+            id,
+            poster
+        });
         player.media = replaceElement(container, player.media);
 
         // Id to poster wrapper
@@ -170,7 +186,7 @@ const youtube = {
 
                 // Captions are flaky on YouTube
                 cc_load_policy: player.captions.active ? 1 : 0,
-                cc_lang_pref: player.config.captions.language,
+                cc_lang_pref: player.config.captions.language
             },
             events: {
                 onError(event) {
@@ -178,16 +194,18 @@ const youtube = {
                     if (!player.media.error) {
                         const code = event.data;
                         // Messages copied from https://developers.google.com/youtube/iframe_api_reference#onError
-                        const message =
-                            {
-                                2: 'The request contains an invalid parameter value. For example, this error occurs if you specify a video ID that does not have 11 characters, or if the video ID contains invalid characters, such as exclamation points or asterisks.',
-                                5: 'The requested content cannot be played in an HTML5 player or another error related to the HTML5 player has occurred.',
-                                100: 'The video requested was not found. This error occurs when a video has been removed (for any reason) or has been marked as private.',
-                                101: 'The owner of the requested video does not allow it to be played in embedded players.',
-                                150: 'The owner of the requested video does not allow it to be played in embedded players.',
-                            }[code] || 'An unknown error occured';
+                        const message = {
+                            2: 'The request contains an invalid parameter value. For example, this error occurs if you specify a video ID that does not have 11 characters, or if the video ID contains invalid characters, such as exclamation points or asterisks.',
+                            5: 'The requested content cannot be played in an HTML5 player or another error related to the HTML5 player has occurred.',
+                            100: 'The video requested was not found. This error occurs when a video has been removed (for any reason) or has been marked as private.',
+                            101: 'The owner of the requested video does not allow it to be played in embedded players.',
+                            150: 'The owner of the requested video does not allow it to be played in embedded players.'
+                        } [code] || 'An unknown error occured';
 
-                        player.media.error = { code, message };
+                        player.media.error = {
+                            code,
+                            message
+                        };
 
                         triggerEvent.call(player, player.media, 'error');
                     }
@@ -248,7 +266,7 @@ const youtube = {
 
                             // Seek after events sent
                             instance.seekTo(time);
-                        },
+                        }
                     });
 
                     // Playback speed
@@ -258,11 +276,13 @@ const youtube = {
                         },
                         set(input) {
                             instance.setPlaybackRate(input);
-                        },
+                        }
                     });
 
                     // Volume
-                    let { volume } = player.config;
+                    let {
+                        volume
+                    } = player.config;
                     Object.defineProperty(player.media, 'volume', {
                         get() {
                             return volume;
@@ -271,11 +291,13 @@ const youtube = {
                             volume = input;
                             instance.setVolume(volume * 100);
                             triggerEvent.call(player, player.media, 'volumechange');
-                        },
+                        }
                     });
 
                     // Muted
-                    let { muted } = player.config;
+                    let {
+                        muted
+                    } = player.config;
                     Object.defineProperty(player.media, 'muted', {
                         get() {
                             return muted;
@@ -285,21 +307,21 @@ const youtube = {
                             muted = toggle;
                             instance[toggle ? 'mute' : 'unMute']();
                             triggerEvent.call(player, player.media, 'volumechange');
-                        },
+                        }
                     });
 
                     // Source
                     Object.defineProperty(player.media, 'currentSrc', {
                         get() {
                             return instance.getVideoUrl();
-                        },
+                        }
                     });
 
                     // Ended
                     Object.defineProperty(player.media, 'ended', {
                         get() {
                             return player.currentTime === player.duration;
-                        },
+                        }
                     });
 
                     // Get available speeds
@@ -427,12 +449,12 @@ const youtube = {
                     }
 
                     triggerEvent.call(player, player.elements.container, 'statechange', false, {
-                        code: event.data,
+                        code: event.data
                     });
-                },
-            },
+                }
+            }
         });
-    },
+    }
 };
 
 export default youtube;

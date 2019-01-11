@@ -5,12 +5,12 @@
 export const providers = {
     html5: 'html5',
     youtube: 'youtube',
-    vimeo: 'vimeo',
+    vimeo: 'vimeo'
 };
 
 export const types = {
     audio: 'audio',
-    video: 'video',
+    video: 'video'
 };
 
 /**
@@ -31,4 +31,7 @@ export function getProviderByUrl(url) {
     return null;
 }
 
-export default { providers, types };
+export default {
+    providers,
+    types
+};

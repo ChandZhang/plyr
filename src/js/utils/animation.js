@@ -2,7 +2,9 @@
 // Animation utils
 // ==========================================================================
 
-import { toggleHidden } from './elements';
+import {
+    toggleHidden
+} from './elements';
 import is from './is';
 
 export const transitionEndEvent = (() => {
@@ -12,7 +14,7 @@ export const transitionEndEvent = (() => {
         WebkitTransition: 'webkitTransitionEnd',
         MozTransition: 'transitionend',
         OTransition: 'oTransitionEnd otransitionend',
-        transition: 'transitionend',
+        transition: 'transitionend'
     };
 
     const type = Object.keys(events).find(event => element.style[event] !== undefined);

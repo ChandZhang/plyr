@@ -44,32 +44,32 @@ const paths = {
         src: {
             sass: path.join(root, 'src/sass/**/*.scss'),
             js: path.join(root, 'src/js/**/*.js'),
-            sprite: path.join(root, 'src/sprite/*.svg'),
+            sprite: path.join(root, 'src/sprite/*.svg')
         },
 
         // Output paths
-        output: path.join(root, 'dist/'),
+        output: path.join(root, 'dist/')
     },
     demo: {
         // Source paths
         src: {
             sass: path.join(root, 'demo/src/sass/**/*.scss'),
-            js: path.join(root, 'demo/src/js/**/*.js'),
+            js: path.join(root, 'demo/src/js/**/*.js')
         },
 
         // Output paths
         output: path.join(root, 'demo/dist/'),
 
         // Demo
-        root: path.join(root, 'demo/'),
+        root: path.join(root, 'demo/')
     },
     upload: [
         path.join(root, `dist/*${minSuffix}.*`),
         path.join(root, 'dist/*.css'),
         path.join(root, 'dist/*.svg'),
         path.join(root, `demo/dist/*${minSuffix}.*`),
-        path.join(root, 'demo/dist/*.css'),
-    ],
+        path.join(root, 'demo/dist/*.css')
+    ]
 };
 
 // Task arrays
@@ -77,11 +77,14 @@ const tasks = {
     sass: [],
     js: [],
     sprite: [],
-    clean: ['clean'],
+    clean: ['clean']
 };
 
 // Size plugin
-const sizeOptions = { showFiles: true, gzip: true };
+const sizeOptions = {
+    showFiles: true,
+    gzip: true
+};
 
 // Browserlist
 const browsers = ['> 1%'];
@@ -93,15 +96,15 @@ const babelrc = (polyfill = false) => ({
             '@babel/preset-env',
             {
                 targets: {
-                    browsers,
+                    browsers
                 },
                 useBuiltIns: polyfill ? 'usage' : false,
-                modules: false,
-            },
-        ],
+                modules: false
+            }
+        ]
     ],
     babelrc: false,
-    exclude: 'node_modules/**',
+    exclude: 'node_modules/**'
 });
 
 // Clean out /dist
@@ -121,31 +124,21 @@ const build = {
         Object.keys(files).forEach(key => {
             const name = `js:${key}`;
             tasks.js.push(name);
-            const { output } = paths[bundle];
+            const {
+                output
+            } = paths[bundle];
             const polyfill = name.includes('polyfilled');
 
             return gulp.task(name, () =>
-                gulp
-                    .src(bundles[bundle].js[key])
-                    .pipe(sourcemaps.init())
-                    .pipe(concat(key))
-                    .pipe(
-                        rollup(
-                            {
-                                plugins: [resolve(), commonjs(), babel(babelrc(polyfill))],
-                            },
-                            options,
-                        ),
-                    )
-                    .pipe(header('typeof navigator === "object" && ')) // "Support" SSR (#935)
-                    .pipe(sourcemaps.write(''))
-                    .pipe(gulp.dest(output))
-                    .pipe(filter('**/*.js'))
-                    .pipe(uglify())
-                    .pipe(size(sizeOptions))
-                    .pipe(rename({ suffix: minSuffix }))
-                    .pipe(sourcemaps.write(''))
-                    .pipe(gulp.dest(output)),
+                gulp.src(bundles[bundle].js[key]).pipe(sourcemaps.init()).pipe(concat(key)).pipe(
+                    rollup({
+                            plugins: [resolve(), commonjs(), babel(babelrc(polyfill))]
+                        },
+                        options,
+                    ),
+                ).pipe(header('typeof navigator === "object" && ')).pipe(gulp.dest(output)).pipe(filter('**/*.js')).pipe(uglify()).pipe(size(sizeOptions)).pipe(rename({
+                    suffix: minSuffix
+                })).pipe(sourcemaps.write('')).pipe(gulp.dest(output)),
             );
         });
     },
@@ -155,15 +148,9 @@ const build = {
             tasks.sass.push(name);
 
             return gulp.task(name, () =>
-                gulp
-                    .src(bundles[bundle].sass[key])
-                    .pipe(sass())
-                    .on('error', gutil.log)
-                    .pipe(concat(key))
-                    .pipe(prefix(browsers, { cascade: false }))
-                    .pipe(cleancss())
-                    .pipe(size(sizeOptions))
-                    .pipe(gulp.dest(paths[bundle].output)),
+                gulp.src(bundles[bundle].sass[key]).pipe(sass()).on('error', gutil.log).pipe(concat(key)).pipe(prefix(browsers, {
+                    cascade: false
+                })).pipe(cleancss()).pipe(size(sizeOptions)).pipe(gulp.dest(paths[bundle].output)),
             );
         });
     },
@@ -173,33 +160,32 @@ const build = {
 
         // Process Icons
         return gulp.task(name, () =>
-            gulp
-                .src(paths[bundle].src.sprite)
-                .pipe(
-                    svgmin({
-                        plugins: [
-                            {
-                                removeDesc: true,
-                            },
-                        ],
-                    }),
-                )
-                .pipe(svgstore())
-                .pipe(rename({ basename: bundle }))
-                .pipe(size(sizeOptions))
-                .pipe(gulp.dest(paths[bundle].output)),
+            gulp.src(paths[bundle].src.sprite).pipe(
+                svgmin({
+                    plugins: [{
+                        removeDesc: true
+                    }]
+                }),
+            ).pipe(svgstore()).pipe(rename({
+                basename: bundle
+            })).pipe(size(sizeOptions)).pipe(gulp.dest(paths[bundle].output)),
         );
-    },
+    }
 };
 
 // Plyr core files
-build.js(bundles.plyr.js, 'plyr', { name: 'Plyr', format: 'umd' });
+build.js(bundles.plyr.js, 'plyr', {
+    name: 'Plyr',
+    format: 'umd'
+});
 build.sass(bundles.plyr.sass, 'plyr');
 build.sprite('plyr');
 
 // Demo files
 build.sass(bundles.demo.sass, 'demo');
-build.js(bundles.demo.js, 'demo', { format: 'iife' });
+build.js(bundles.demo.js, 'demo', {
+    format: 'iife'
+});
 
 // Build all JS
 gulp.task('js', () => gulp.parallel(tasks.js));
@@ -234,14 +220,19 @@ try {
 
 // If deployment is setup
 if (Object.keys(credentials).includes('aws') && Object.keys(credentials).includes('fastly')) {
-    const { version } = pkg;
-    const { aws, fastly } = credentials;
+    const {
+        version
+    } = pkg;
+    const {
+        aws,
+        fastly
+    } = credentials;
 
     // Get branch info
     const branch = {
         current: gitbranch.sync(),
         master: 'master',
-        develop: 'develop',
+        develop: 'develop'
     };
 
     const maxAge = 31536000; // 1 year
@@ -249,25 +240,25 @@ if (Object.keys(credentials).includes('aws') && Object.keys(credentials).include
         cdn: {
             headers: {
                 'Cache-Control': `max-age=${maxAge}`,
-                Vary: 'Accept-Encoding',
-            },
+                Vary: 'Accept-Encoding'
+            }
         },
         demo: {
             uploadPath: branch.current === branch.develop ? 'beta/' : null,
             headers: {
                 'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
-                Vary: 'Accept-Encoding',
-            },
+                Vary: 'Accept-Encoding'
+            }
         },
         symlinks(ver, filename) {
             return {
                 headers: {
                     // http://stackoverflow.com/questions/2272835/amazon-s3-object-redirect
                     'x-amz-website-redirect-location': `/${ver}/${filename}`,
-                    'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
-                },
+                    'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0'
+                }
             };
-        },
+        }
     };
 
     const regex =
@@ -306,7 +297,9 @@ if (Object.keys(credentials).includes('aws') && Object.keys(credentials).include
         const files = ['plyr.js', 'plyr.polyfilled.js', 'config/defaults.js'];
 
         return gulp
-            .src(files.map(file => path.join(root, `src/js/${file}`)), { base: '.' })
+            .src(files.map(file => path.join(root, `src/js/${file}`)), {
+                base: '.'
+            })
             .pipe(replace(semver, `v${version}`))
             .pipe(replace(cdnpath, `${aws.cdn.domain}/${version}/`))
             .pipe(gulp.dest('./'));
@@ -322,24 +315,17 @@ if (Object.keys(credentials).includes('aws') && Object.keys(credentials).include
 
         // Upload to CDN
         return (
-            gulp
-                .src(paths.upload)
-                .pipe(renameFile)
-                // Remove min suffix from source map URL
-                .pipe(
-                    replace(
-                        /sourceMappingURL=([\w-?.]+)/,
-                        (match, p1) => `sourceMappingURL=${p1.replace(minSuffix, '')}`,
-                    ),
-                )
-                .pipe(
-                    size({
-                        showFiles: true,
-                        gzip: true,
-                    }),
-                )
-                .pipe(replace(localPath, versionPath))
-                .pipe(s3(aws.cdn, options.cdn))
+            gulp.src(paths.upload).pipe(renameFile).pipe(
+                replace(
+                    /sourceMappingURL=([\w-?.]+)/,
+                    (match, p1) => `sourceMappingURL=${p1.replace(minSuffix, '')}`,
+                ),
+            ).pipe(
+                size({
+                    showFiles: true,
+                    gzip: true
+                }),
+            ).pipe(replace(localPath, versionPath)).pipe(s3(aws.cdn, options.cdn))
         );
     });
 
@@ -439,7 +425,7 @@ if (Object.keys(credentials).includes('aws') && Object.keys(credentials).include
     gulp.task('open', callback => {
         gulp.src(__filename).pipe(
             open({
-                uri: `https://${aws.demo.domain}`,
+                uri: `https://${aws.demo.domain}`
             }),
         );
 

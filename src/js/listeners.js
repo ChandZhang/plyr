@@ -389,7 +389,7 @@ class Listeners {
         on.call(player, player.media, 'waiting canplay seeked playing', event => ui.checkLoading.call(player, event));
 
         // If autoplay, then load advertisement if required
-        // TODO: Show some sort of loading state while the ad manager loads else there's a delay before ad shows
+        // Show some sort of loading state while the ad manager loads else there's a delay before ad shows
         on.call(player, player.media, 'playing', () => {
             if (!player.ads) {
                 return;
@@ -453,7 +453,7 @@ class Listeners {
             // Save to storage
             player.storage.set({
                 volume: player.volume,
-                muted: player.muted,
+                muted: player.muted
             });
         });
 

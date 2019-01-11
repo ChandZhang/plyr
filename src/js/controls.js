@@ -1,6 +1,6 @@
 // ==========================================================================
 // Plyr controls
-// TODO: This needs to be split into smaller files and cleaned up
+// This needs to be split into smaller files and cleaned up
 // ==========================================================================
 
 import captions from './captions';
@@ -50,7 +50,7 @@ import {
     getHours
 } from './utils/time';
 
-// TODO: Don't export a massive object - break down and create class
+// Don't export a massive object - break down and create class
 const controls = {
     // Get icon URL
     getIconUrl() {
@@ -59,7 +59,7 @@ const controls = {
 
         return {
             url: this.config.iconUrl,
-            cors,
+            cors
         };
     },
 
@@ -80,7 +80,7 @@ const controls = {
                 airplay: getElement.call(this, this.config.selectors.buttons.airplay),
                 settings: getElement.call(this, this.config.selectors.buttons.settings),
                 captions: getElement.call(this, this.config.selectors.buttons.captions),
-                fullscreen: getElement.call(this, this.config.selectors.buttons.fullscreen),
+                fullscreen: getElement.call(this, this.config.selectors.buttons.fullscreen)
             };
 
             // Progress
@@ -89,14 +89,14 @@ const controls = {
             // Inputs
             this.elements.inputs = {
                 seek: getElement.call(this, this.config.selectors.inputs.seek),
-                volume: getElement.call(this, this.config.selectors.inputs.volume),
+                volume: getElement.call(this, this.config.selectors.inputs.volume)
             };
 
             // Display
             this.elements.display = {
                 buffer: getElement.call(this, this.config.selectors.display.buffer),
                 currentTime: getElement.call(this, this.config.selectors.display.currentTime),
-                duration: getElement.call(this, this.config.selectors.display.duration),
+                duration: getElement.call(this, this.config.selectors.display.duration)
             };
 
             // Seek tooltip
@@ -130,7 +130,7 @@ const controls = {
             icon,
             extend(attributes, {
                 role: 'presentation',
-                focusable: 'false',
+                focusable: 'false'
             }),
         );
 
@@ -159,7 +159,7 @@ const controls = {
         const text = i18n.get(key, this.config);
 
         const attributes = Object.assign({}, attr, {
-            class: [attr.class, this.config.classNames.hidden].filter(Boolean).join(' '),
+            class: [attr.class, this.config.classNames.hidden].filter(Boolean).join(' ')
         });
 
         return createElement('span', attributes, text);
@@ -172,13 +172,13 @@ const controls = {
         }
 
         const badge = createElement('span', {
-            class: this.config.classNames.menu.value,
+            class: this.config.classNames.menu.value
         });
 
         badge.appendChild(
             createElement(
                 'span', {
-                    class: this.config.classNames.menu.badge,
+                    class: this.config.classNames.menu.badge
                 },
                 text,
             ),
@@ -198,7 +198,7 @@ const controls = {
             label: null,
             icon: null,
             labelPressed: null,
-            iconPressed: null,
+            iconPressed: null
         };
 
         ['element', 'icon', 'label'].forEach(key => {
@@ -279,24 +279,24 @@ const controls = {
             // Icon
             button.appendChild(
                 controls.createIcon.call(this, props.iconPressed, {
-                    class: 'icon--pressed',
+                    class: 'icon--pressed'
                 }),
             );
             button.appendChild(
                 controls.createIcon.call(this, props.icon, {
-                    class: 'icon--not-pressed',
+                    class: 'icon--not-pressed'
                 }),
             );
 
             // Label/Tooltip
             button.appendChild(
                 controls.createLabel.call(this, props.labelPressed, {
-                    class: 'label--pressed',
+                    class: 'label--pressed'
                 }),
             );
             button.appendChild(
                 controls.createLabel.call(this, props.label, {
-                    class: 'label--not-pressed',
+                    class: 'label--not-pressed'
                 }),
             );
         } else {
@@ -340,7 +340,7 @@ const controls = {
                     'aria-label': i18n.get(type, this.config),
                     'aria-valuemin': 0,
                     'aria-valuemax': 100,
-                    'aria-valuenow': 0,
+                    'aria-valuenow': 0
                 },
                 attributes,
             ),
@@ -364,7 +364,7 @@ const controls = {
                     max: 100,
                     value: 0,
                     role: 'presentation',
-                    'aria-hidden': true,
+                    'aria-hidden': true
                 },
                 attributes,
             ),
@@ -376,7 +376,7 @@ const controls = {
 
             const suffixKey = {
                 played: 'played',
-                buffer: 'buffered',
+                buffer: 'buffered'
             } [type];
             const suffix = suffixKey ? i18n.get(suffixKey, this.config) : '';
 
@@ -396,7 +396,7 @@ const controls = {
             'div',
             extend(attributes, {
                 class: `${this.config.classNames.display.time} ${attributes.class ? attributes.class : ''}`.trim(),
-                'aria-label': i18n.get(type, this.config),
+                'aria-label': i18n.get(type, this.config)
             }),
             '00:00',
         );
@@ -489,7 +489,7 @@ const controls = {
                 role: 'menuitemradio',
                 class: `${this.config.classNames.control} ${attributes.class ? attributes.class : ''}`.trim(),
                 'aria-checked': checked,
-                value,
+                value
             }),
         );
 
@@ -519,7 +519,7 @@ const controls = {
                 }
 
                 menuItem.setAttribute('aria-checked', checked ? 'true' : 'false');
-            },
+            }
         });
 
         this.listeners.bind(
@@ -654,7 +654,7 @@ const controls = {
                         controls.setRange.call(this, this.elements.inputs.seek, value);
 
                         // FIXME: EXTEND Time is up
-                        if ((this.currentTime == this.duration) || (this.currentTime - this.duration) >= 0.5) {
+                        if ((this.currentTime === this.duration) || (this.currentTime - this.duration) >= 0.5) {
                             triggerEvent.call(this, this.media, 'ended');
                             this.restart();
                         }
@@ -965,7 +965,7 @@ const controls = {
                     list,
                     type,
                     title: controls.getLabel.call(this, 'quality', quality),
-                    badge: getBadge(quality),
+                    badge: getBadge(quality)
                 });
             });
 
@@ -1017,7 +1017,7 @@ const controls = {
     }, */
 
     // Get current selected caption language
-    // TODO: rework this to user the getter in the API?
+    // rework this to user the getter in the API?
 
     // Set a list of available captions languages
     setCaptionsMenu() {
@@ -1026,7 +1026,7 @@ const controls = {
             return;
         }
 
-        // TODO: Captions or language? Currently it's mixed
+        // Captions or language? Currently it's mixed
         const type = 'captions';
         const list = this.elements.settings.panels.captions.querySelector('[role="menu"]');
         const tracks = captions.getTracks.call(this);
@@ -1053,7 +1053,7 @@ const controls = {
             title: captions.getLabel.call(this, track),
             badge: track.language && controls.createBadge.call(this, track.language.toUpperCase()),
             list,
-            type: 'language',
+            type: 'language'
         }));
 
         // Add the "Disabled" option to turn off captions
@@ -1062,7 +1062,7 @@ const controls = {
             checked: !this.captions.toggled,
             title: i18n.get('disabled', this.config),
             list,
-            type: 'language',
+            type: 'language'
         });
 
         // Generate options
@@ -1112,7 +1112,7 @@ const controls = {
                 value: speed,
                 list,
                 type,
-                title: controls.getLabel.call(this, 'speed', speed),
+                title: controls.getLabel.call(this, 'speed', speed)
             });
         });
 
@@ -1216,7 +1216,7 @@ const controls = {
 
         return {
             width,
-            height,
+            height
         };
     },
 
@@ -1289,7 +1289,7 @@ const controls = {
     },
 
     // Build the default HTML
-    // TODO: Set order based on order in the config.controls array?
+    // Set order based on order in the config.controls array?
     create(data) {
         // Create the container
         const container = createElement('div', getAttributesFromSelector(this.config.selectors.controls.wrapper));
@@ -1321,20 +1321,20 @@ const controls = {
             // Seek range slider
             progress.appendChild(
                 controls.createRange.call(this, 'seek', {
-                    id: `plyr-seek-${data.id}`,
+                    id: `plyr-seek-${data.id}`
                 }),
             );
 
             // Buffer progress
             progress.appendChild(controls.createProgress.call(this, 'buffer'));
 
-            // TODO: Add loop display indicator
+            // Add loop display indicator
 
             // Seek tooltip
             if (this.config.tooltips.seek) {
                 const tooltip = createElement(
                     'span', {
-                        class: this.config.classNames.tooltip,
+                        class: this.config.classNames.tooltip
                     },
                     '00:00',
                 );
@@ -1360,7 +1360,7 @@ const controls = {
         // Volume controls
         if (this.config.controls.includes('mute') || this.config.controls.includes('volume')) {
             const volume = createElement('div', {
-                class: 'plyr__volume',
+                class: 'plyr__volume'
             });
 
             // Toggle mute button
@@ -1374,7 +1374,7 @@ const controls = {
                 const attributes = {
                     max: 1,
                     step: 0.05,
-                    value: this.config.volume,
+                    value: this.config.volume
                 };
 
                 // Create the volume range slider
@@ -1383,7 +1383,7 @@ const controls = {
                         this,
                         'volume',
                         extend(attributes, {
-                            id: `plyr-volume-${data.id}`,
+                            id: `plyr-volume-${data.id}`
                         }),
                     ),
                 );
@@ -1403,32 +1403,32 @@ const controls = {
         if (this.config.controls.includes('settings') && !is.empty(this.config.settings)) {
             const control = createElement('div', {
                 class: 'plyr__menu',
-                hidden: '',
+                hidden: ''
             });
 
             control.appendChild(
                 controls.createButton.call(this, 'settings', {
                     'aria-haspopup': true,
                     'aria-controls': `plyr-settings-${data.id}`,
-                    'aria-expanded': false,
+                    'aria-expanded': false
                 }),
             );
 
             const popup = createElement('div', {
                 class: 'plyr__menu__container',
                 id: `plyr-settings-${data.id}`,
-                hidden: '',
+                hidden: ''
             });
 
             const inner = createElement('div');
 
             const home = createElement('div', {
-                id: `plyr-settings-${data.id}-home`,
+                id: `plyr-settings-${data.id}-home`
             });
 
             // Create the menu
             const menu = createElement('div', {
-                role: 'menu',
+                role: 'menu'
             });
 
             home.appendChild(menu);
@@ -1437,7 +1437,7 @@ const controls = {
 
             // Build the menu items
             this.config.settings.forEach(type => {
-                // TODO: bundle this with the createMenuItem helper and bindings
+                // bundle this with the createMenuItem helper and bindings
                 const menuItem = createElement(
                     'button',
                     extend(getAttributesFromSelector(this.config.selectors.buttons.settings), {
@@ -1445,7 +1445,7 @@ const controls = {
                         class: `${this.config.classNames.control} ${this.config.classNames.control}--forward`,
                         role: 'menuitem',
                         'aria-haspopup': true,
-                        hidden: '',
+                        hidden: ''
                     }),
                 );
 
@@ -1460,7 +1460,7 @@ const controls = {
                 const flex = createElement('span', null, i18n.get(type, this.config));
 
                 const value = createElement('span', {
-                    class: this.config.classNames.menu.value,
+                    class: this.config.classNames.menu.value
                 });
 
                 // Speed contains HTML entities
@@ -1473,20 +1473,20 @@ const controls = {
                 // Build the panes
                 const pane = createElement('div', {
                     id: `plyr-settings-${data.id}-${type}`,
-                    hidden: '',
+                    hidden: ''
                 });
 
                 // Back button
                 const backButton = createElement('button', {
                     type: 'button',
-                    class: `${this.config.classNames.control} ${this.config.classNames.control}--back`,
+                    class: `${this.config.classNames.control} ${this.config.classNames.control}--back`
                 });
 
                 // Visible label
                 backButton.appendChild(
                     createElement(
                         'span', {
-                            'aria-hidden': true,
+                            'aria-hidden': true
                         },
                         i18n.get(type, this.config),
                     ),
@@ -1496,7 +1496,7 @@ const controls = {
                 backButton.appendChild(
                     createElement(
                         'span', {
-                            class: this.config.classNames.hidden,
+                            class: this.config.classNames.hidden
                         },
                         i18n.get('menuBack', this.config),
                     ),
@@ -1533,7 +1533,7 @@ const controls = {
                 // Menu
                 pane.appendChild(
                     createElement('div', {
-                        role: 'menu',
+                        role: 'menu'
                     }),
                 );
 
@@ -1566,7 +1566,7 @@ const controls = {
             const attributes = {
                 element: 'a',
                 href: this.download,
-                target: '_blank',
+                target: '_blank'
             };
 
             const {
@@ -1576,7 +1576,7 @@ const controls = {
             if (!is.url(download) && this.isEmbed) {
                 extend(attributes, {
                     icon: `logo-${this.provider}`,
-                    label: this.provider,
+                    label: this.provider
                 });
             }
 
@@ -1628,7 +1628,7 @@ const controls = {
         const props = {
             id: this.id,
             seektime: this.config.seekTime,
-            title: this.config.title,
+            title: this.config.title
         };
         let update = true;
 
@@ -1652,8 +1652,8 @@ const controls = {
                 seektime: this.config.seekTime,
                 speed: this.speed,
                 quality: this.quality,
-                captions: captions.getLabel.call(this),
-                // TODO: Looping
+                captions: captions.getLabel.call(this)
+                // Looping
                 // loop: 'None',
             });
             update = false;
@@ -1712,7 +1712,7 @@ const controls = {
                     },
                     set(pressed = false) {
                         toggleClass(button, className, pressed);
-                    },
+                    }
                 });
             };
 
@@ -1747,7 +1747,7 @@ const controls = {
                 toggleClass(label, this.config.classNames.tooltip, true);
             });
         }
-    },
+    }
 };
 
 export default controls;

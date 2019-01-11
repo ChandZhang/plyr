@@ -3,8 +3,12 @@
 // ==========================================================================
 
 import is from './is';
-import { getDeep } from './objects';
-import { replaceAll } from './strings';
+import {
+    getDeep
+} from './objects';
+import {
+    replaceAll
+} from './strings';
 
 // Skip i18n for abbreviations and brand names
 const resources = {
@@ -12,7 +16,7 @@ const resources = {
     airplay: 'AirPlay',
     html5: 'HTML5',
     vimeo: 'Vimeo',
-    youtube: 'YouTube',
+    youtube: 'YouTube'
 };
 
 const i18n = {
@@ -33,7 +37,7 @@ const i18n = {
 
         const replace = {
             '{seektime}': config.seekTime,
-            '{title}': config.title,
+            '{title}': config.title
         };
 
         Object.entries(replace).forEach(([key, value]) => {
@@ -41,7 +45,7 @@ const i18n = {
         });
 
         return string;
-    },
+    }
 };
 
 export default i18n;

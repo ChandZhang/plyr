@@ -67,12 +67,12 @@ const defaults = {
     // Quality default
     quality: {
         default: 720,
-        options: [4320, 2880, 2160, 1440, 1080, 720, 576, 480, 360, 240],
+        options: [4320, 2880, 2160, 1440, 1080, 720, 576, 480, 360, 240]
     },
 
     // Set loops
     loop: {
-        active: false,
+        active: false
         // start: null,
         // end: null,
     },
@@ -80,19 +80,19 @@ const defaults = {
     // Speed default and options to display
     speed: {
         selected: 1,
-        options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
+        options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
     },
 
     // Keyboard shortcut settings
     keyboard: {
         focused: true,
-        global: false,
+        global: false
     },
 
     // Display tooltips
     tooltips: {
         controls: false,
-        seek: true,
+        seek: true
     },
 
     // Captions settings
@@ -101,20 +101,20 @@ const defaults = {
         language: 'auto',
         // Listen to new tracks added after Plyr is initialized.
         // This is needed for streaming captions, but may result in unselectable options
-        update: false,
+        update: false
     },
 
     // Fullscreen settings
     fullscreen: {
         enabled: true, // Allow fullscreen?
         fallback: true, // Fallback for vintage browsers
-        iosNative: false, // Use the native fullscreen in iOS (disables custom controls)
+        iosNative: false // Use the native fullscreen in iOS (disables custom controls)
     },
 
     // Local storage
     storage: {
         enabled: true,
-        key: 'plyr',
+        key: 'plyr'
     },
 
     // Default controls
@@ -133,7 +133,7 @@ const defaults = {
         // 'pip',
         // 'airplay',
         // 'download',
-        'fullscreen',
+        'fullscreen'
     ],
     settings: ['captions', 'quality', 'speed'],
 
@@ -179,8 +179,8 @@ const defaults = {
             1080: 'HD',
             720: 'HD',
             576: 'SD',
-            480: 'SD',
-        },
+            480: 'SD'
+        }
     },
 
     // URLs
@@ -189,15 +189,15 @@ const defaults = {
         vimeo: {
             sdk: 'https://player.vimeo.com/api/player.js',
             iframe: 'https://player.vimeo.com/video/{0}?{1}',
-            api: 'https://vimeo.com/api/v2/video/{0}.json',
+            api: 'https://vimeo.com/api/v2/video/{0}.json'
         },
         youtube: {
             sdk: 'https://www.youtube.com/iframe_api',
-            api: 'https://www.googleapis.com/youtube/v3/videos?id={0}&key={1}&fields=items(snippet(title))&part=snippet',
+            api: 'https://www.googleapis.com/youtube/v3/videos?id={0}&key={1}&fields=items(snippet(title))&part=snippet'
         },
         googleIMA: {
-            sdk: 'https://imasdk.googleapis.com/js/sdkloader/ima3.js',
-        },
+            sdk: 'https://imasdk.googleapis.com/js/sdkloader/ima3.js'
+        }
     },
 
     // Custom control listeners
@@ -218,7 +218,7 @@ const defaults = {
         speed: null,
         quality: null,
         loop: null,
-        language: null,
+        language: null
     },
 
     // Events to watch and bubble
@@ -272,7 +272,7 @@ const defaults = {
         'adscomplete',
         'adsallcomplete',
         'adsimpression',
-        'adsclick',
+        'adsclick'
     ],
 
     // Selectors
@@ -282,7 +282,7 @@ const defaults = {
         container: '.plyr',
         controls: {
             container: null,
-            wrapper: '.plyr__controls',
+            wrapper: '.plyr__controls'
         },
         labels: '[data-plyr]',
         buttons: {
@@ -298,28 +298,28 @@ const defaults = {
             pip: '[data-plyr="pip"]',
             airplay: '[data-plyr="airplay"]',
             settings: '[data-plyr="settings"]',
-            loop: '[data-plyr="loop"]',
+            loop: '[data-plyr="loop"]'
         },
         inputs: {
             seek: '[data-plyr="seek"]',
             volume: '[data-plyr="volume"]',
             speed: '[data-plyr="speed"]',
             language: '[data-plyr="language"]',
-            quality: '[data-plyr="quality"]',
+            quality: '[data-plyr="quality"]'
         },
         display: {
             currentTime: '.plyr__time--current',
             duration: '.plyr__time--duration',
             buffer: '.plyr__progress__buffer',
             loop: '.plyr__progress__loop', // Used later
-            volume: '.plyr__volume--display',
+            volume: '.plyr__volume--display'
         },
         progress: '.plyr__progress',
         captions: '.plyr__captions',
         caption: '.plyr__caption',
         menu: {
-            quality: '.js-plyr__menu__list--quality',
-        },
+            quality: '.js-plyr__menu__list--quality'
+        }
     },
 
     // Class hooks added to the player in different states
@@ -348,51 +348,51 @@ const defaults = {
         uiSupported: 'plyr--full-ui',
         noTransition: 'plyr--no-transition',
         display: {
-            time: 'plyr__time',
+            time: 'plyr__time'
         },
         menu: {
             value: 'plyr__menu__value',
             badge: 'plyr__badge',
-            open: 'plyr--menu-open',
+            open: 'plyr--menu-open'
         },
         captions: {
             enabled: 'plyr--captions-enabled',
-            active: 'plyr--captions-active',
+            active: 'plyr--captions-active'
         },
         fullscreen: {
             enabled: 'plyr--fullscreen-enabled',
-            fallback: 'plyr--fullscreen-fallback',
+            fallback: 'plyr--fullscreen-fallback'
         },
         pip: {
             supported: 'plyr--pip-supported',
-            active: 'plyr--pip-active',
+            active: 'plyr--pip-active'
         },
         airplay: {
             supported: 'plyr--airplay-supported',
-            active: 'plyr--airplay-active',
+            active: 'plyr--airplay-active'
         },
-        tabFocus: 'plyr__tab-focus',
+        tabFocus: 'plyr__tab-focus'
     },
 
     // Embed attributes
     attributes: {
         embed: {
             provider: 'data-plyr-provider',
-            id: 'data-plyr-embed-id',
-        },
+            id: 'data-plyr-embed-id'
+        }
     },
 
     // API keys
     keys: {
-        google: null,
+        google: null
     },
 
     // Advertisements plugin
     // Register for an account here: http://vi.ai/publisher-video-monetization/?aid=plyrio
     ads: {
         enabled: false,
-        publisherId: '',
-    },
+        publisherId: ''
+    }
 };
 
 export default defaults;

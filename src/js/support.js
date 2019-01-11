@@ -2,9 +2,13 @@
 // Plyr support checks
 // ==========================================================================
 
-import { transitionEndEvent } from './utils/animation';
+import {
+    transitionEndEvent
+} from './utils/animation';
 import browser from './utils/browser';
-import { createElement } from './utils/elements';
+import {
+    createElement
+} from './utils/elements';
 import is from './utils/is';
 
 // Default codecs for checking mimetype support
@@ -13,7 +17,7 @@ const defaultCodecs = {
     'audio/wav': '1',
     'video/webm': 'vp8, vorbis',
     'video/mp4': 'avc1.42E01E, mp4a.40.2',
-    'video/ogg': 'theora',
+    'video/ogg': 'theora'
 };
 
 // Check for feature support
@@ -31,7 +35,7 @@ const support = {
 
         return {
             api,
-            ui,
+            ui
         };
     },
 
@@ -108,7 +112,7 @@ const support = {
 
     // Reduced motion iOS & MacOS setting
     // https://webkit.org/blog/7551/responsive-design-for-motion/
-    reducedMotion: 'matchMedia' in window && window.matchMedia('(prefers-reduced-motion)').matches,
+    reducedMotion: 'matchMedia' in window && window.matchMedia('(prefers-reduced-motion)').matches
 };
 
 export default support;

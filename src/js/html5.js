@@ -3,8 +3,12 @@
 // ==========================================================================
 
 import support from './support';
-import { removeElement } from './utils/elements';
-import { triggerEvent } from './utils/events';
+import {
+    removeElement
+} from './utils/elements';
+import {
+    triggerEvent
+} from './utils/events';
 
 const html5 = {
     getSources() {
@@ -57,7 +61,12 @@ const html5 = {
                 }
 
                 // Get current state
-                const { currentTime, paused, preload, readyState } = player.media;
+                const {
+                    currentTime,
+                    paused,
+                    preload,
+                    readyState
+                } = player.media;
 
                 // Set new source
                 player.media.src = source.getAttribute('src');
@@ -80,9 +89,9 @@ const html5 = {
 
                 // Trigger change event
                 triggerEvent.call(player, player.media, 'qualitychange', false, {
-                    quality: input,
+                    quality: input
                 });
-            },
+            }
         });
     },
 
@@ -108,7 +117,7 @@ const html5 = {
 
         // Debugging
         this.debug.log('Cancelled network requests');
-    },
+    }
 };
 
 export default html5;

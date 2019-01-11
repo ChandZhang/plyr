@@ -15,7 +15,7 @@ const supportsPassiveListeners = (() => {
             get() {
                 supported = true;
                 return null;
-            },
+            }
         });
         window.addEventListener('test', null, options);
         window.removeEventListener('test', null, options);
@@ -46,7 +46,7 @@ export function toggleListener(element, event, callback, toggle = false, passive
             // Whether the listener can be passive (i.e. default never prevented)
             passive,
             // Whether the listener is a capturing listener or not
-            capture,
+            capture
         };
     }
 
@@ -54,7 +54,12 @@ export function toggleListener(element, event, callback, toggle = false, passive
     events.forEach(type => {
         if (this && this.eventListeners && toggle) {
             // Cache event listener
-            this.eventListeners.push({ element, type, callback, options });
+            this.eventListeners.push({
+                element,
+                type,
+                callback,
+                options
+            });
         }
 
         element[toggle ? 'addEventListener' : 'removeEventListener'](type, callback, options);
@@ -92,8 +97,8 @@ export function triggerEvent(element, type = '', bubbles = false, detail = {}) {
     const event = new CustomEvent(type, {
         bubbles,
         detail: Object.assign({}, detail, {
-            plyr: this,
-        }),
+            plyr: this
+        })
     });
 
     // Dispatch the event
@@ -104,7 +109,12 @@ export function triggerEvent(element, type = '', bubbles = false, detail = {}) {
 export function unbindListeners() {
     if (this && this.eventListeners) {
         this.eventListeners.forEach(item => {
-            const { element, type, callback, options } = item;
+            const {
+                element,
+                type,
+                callback,
+                options
+            } = item;
             element.removeEventListener(type, callback, options);
         });
 

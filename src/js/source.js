@@ -2,21 +2,29 @@
 // Plyr source update
 // ==========================================================================
 
-import { providers } from './config/types';
+import {
+    providers
+} from './config/types';
 import html5 from './html5';
 import media from './media';
 import support from './support';
 import ui from './ui';
-import { createElement, insertElement, removeElement } from './utils/elements';
+import {
+    createElement,
+    insertElement,
+    removeElement
+} from './utils/elements';
 import is from './utils/is';
-import { getDeep } from './utils/objects';
+import {
+    getDeep
+} from './utils/objects';
 
 const source = {
     // Add elements to HTML5 media (source, tracks, etc)
     insertElements(type, attributes) {
         if (is.string(attributes)) {
             insertElement(type, this.media, {
-                src: attributes,
+                src: attributes
             });
         } else if (is.array(attributes)) {
             attributes.forEach(attribute => {
@@ -53,10 +61,18 @@ const source = {
                 }
 
                 // Set the type and provider
-                const { sources, type } = input;
-                const [{ provider = providers.html5, src }] = sources;
+                const {
+                    sources,
+                    type
+                } = input;
+                const [{
+                    provider = providers.html5,
+                    src
+                }] = sources;
                 const tagName = provider === 'html5' ? type : 'div';
-                const attributes = provider === 'html5' ? {} : { src };
+                const attributes = provider === 'html5' ? {} : {
+                    src
+                };
 
                 Object.assign(this, {
                     provider,
@@ -64,7 +80,7 @@ const source = {
                     // Check for support
                     supported: support.check(type, provider, this.config.playsinline),
                     // Create new element
-                    media: createElement(tagName, attributes),
+                    media: createElement(tagName, attributes)
                 });
 
                 // Inject the new element
@@ -135,7 +151,7 @@ const source = {
             },
             true,
         );
-    },
+    }
 };
 
 export default source;

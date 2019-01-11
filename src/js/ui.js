@@ -177,32 +177,25 @@ const ui = {
 
         // Set property synchronously to respect the call order
         this.media.setAttribute('poster', poster);
-
         // Wait until ui is ready
         return (
-            ready
-            .call(this)
-            // Load image
-            .then(() => loadImage(poster))
-            .catch(err => {
+            ready.call(this).then(() => loadImage(poster)).catch(err => {
                 // Hide poster on error unless it's been set by another call
                 if (poster === this.poster) {
                     ui.togglePoster.call(this, false);
                 }
                 // Rethrow
                 throw err;
-            })
-            .then(() => {
+            }).then(() => {
                 // Prevent race conditions
                 if (poster !== this.poster) {
                     throw new Error('setPoster cancelled by later call to setPoster');
                 }
-            })
-            .then(() => {
+            }).then(() => {
                 Object.assign(this.elements.poster.style, {
                     backgroundImage: `url('${poster}')`,
                     // Reset backgroundSize as well (since it can be set to "cover" for padded thumbnails for youtube)
-                    backgroundSize: '',
+                    backgroundSize: ''
                 });
                 ui.togglePoster.call(this, true);
                 return poster;
@@ -250,7 +243,7 @@ const ui = {
 
     // Toggle controls based on state and `force` argument
     toggleControls(force) {
-        //FIXME: elements is undefined
+        // FIXME: elements is undefined
         if (!this.elements) {
             return;
         }
@@ -265,7 +258,7 @@ const ui = {
             // Show controls if force, loading, paused, button interaction, or recent seek, otherwise hide
             this.toggleControls(Boolean(force || this.loading || this.paused || controls.pressed || controls.hover || recentTouchSeek));
         }
-    },
+    }
 };
 
 export default ui;

@@ -64,7 +64,7 @@ export default function loadSprite(url, id) {
                     window.localStorage.setItem(
                         `${prefix}-${id}`,
                         JSON.stringify({
-                            content: result,
+                            content: result
                         }),
                     );
                 }

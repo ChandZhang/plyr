@@ -5,7 +5,11 @@
 import html5 from './html5';
 import vimeo from './plugins/vimeo';
 import youtube from './plugins/youtube';
-import { createElement, toggleClass, wrap } from './utils/elements';
+import {
+    createElement,
+    toggleClass,
+    wrap
+} from './utils/elements';
 
 const media = {
     // Setup media
@@ -32,7 +36,7 @@ const media = {
         if (this.isVideo) {
             // Create the wrapper div
             this.elements.wrapper = createElement('div', {
-                class: this.config.classNames.video,
+                class: this.config.classNames.video
             });
 
             // Wrap the video in a container
@@ -40,7 +44,7 @@ const media = {
 
             // Faux poster container
             this.elements.poster = createElement('div', {
-                class: this.config.classNames.poster,
+                class: this.config.classNames.poster
             });
 
             this.elements.wrapper.appendChild(this.elements.poster);
@@ -53,7 +57,7 @@ const media = {
         } else if (this.isVimeo) {
             vimeo.setup.call(this);
         }
-    },
+    }
 };
 
 export default media;

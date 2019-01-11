@@ -6,13 +6,21 @@
 
 /* global google */
 
-import { createElement } from '../utils/elements';
-import { triggerEvent } from '../utils/events';
+import {
+    createElement
+} from '../utils/elements';
+import {
+    triggerEvent
+} from '../utils/events';
 import i18n from '../utils/i18n';
 import is from '../utils/is';
 import loadScript from '../utils/loadScript';
-import { formatTime } from '../utils/time';
-import { buildUrlParams } from '../utils/urls';
+import {
+    formatTime
+} from '../utils/time';
+import {
+    buildUrlParams
+} from '../utils/urls';
 
 class Ads {
     /**
@@ -27,7 +35,7 @@ class Ads {
         this.initialized = false;
         this.elements = {
             container: null,
-            displayContainer: null,
+            displayContainer: null
         };
         this.manager = null;
         this.loader = null;
@@ -104,7 +112,7 @@ class Ads {
             cb: Date.now(),
             AV_WIDTH: 640,
             AV_HEIGHT: 480,
-            AV_CDIM2: this.publisherId,
+            AV_CDIM2: this.publisherId
         };
 
         const base = 'https://go.aniview.com/api/adserver6/vast/';
@@ -123,7 +131,7 @@ class Ads {
     setupIMA() {
         // Create the container for our advertisements
         this.elements.container = createElement('div', {
-            class: this.player.config.classNames.ads,
+            class: this.player.config.classNames.ads
         });
         this.player.elements.container.appendChild(this.elements.container);
 
@@ -145,7 +153,9 @@ class Ads {
      * Request advertisements
      */
     requestAds() {
-        const { container } = this.player.elements;
+        const {
+            container
+        } = this.player.elements;
 
         try {
             // Create ads loader
@@ -235,7 +245,7 @@ class Ads {
                     if (is.element(seekElement)) {
                         const cuePercentage = 100 / this.player.duration * cuePoint;
                         const cue = createElement('span', {
-                            class: this.player.config.classNames.cues,
+                            class: this.player.config.classNames.cues
                         });
 
                         cue.style.left = `${cuePercentage.toString()}%`;
@@ -268,7 +278,9 @@ class Ads {
      * @param {Event} event
      */
     onAdEvent(event) {
-        const { container } = this.player.elements;
+        const {
+            container
+        } = this.player.elements;
 
         // Retrieve the ad from the event. Some events (e.g. ALL_ADS_COMPLETED)
         // don't have ad object associated
@@ -388,7 +400,9 @@ class Ads {
      * resize the advertisement when the player resizes
      */
     listeners() {
-        const { container } = this.player.elements;
+        const {
+            container
+        } = this.player.elements;
         let time;
 
         // Add listeners to the required events
@@ -429,7 +443,9 @@ class Ads {
      * Initialize the adsManager and start playing advertisements
      */
     play() {
-        const { container } = this.player.elements;
+        const {
+            container
+        } = this.player.elements;
 
         if (!this.managerPromise) {
             this.resumeContent();

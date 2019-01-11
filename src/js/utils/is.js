@@ -66,5 +66,5 @@ export default {
     cue: isCue,
     track: isTrack,
     url: isUrl,
-    empty: isEmpty,
+    empty: isEmpty
 };

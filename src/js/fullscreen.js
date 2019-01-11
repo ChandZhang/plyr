@@ -4,10 +4,19 @@
 // https://webkit.org/blog/7929/designing-websites-for-iphone-x/
 // ==========================================================================
 
-import { repaint } from './utils/animation';
+import {
+    repaint
+} from './utils/animation';
 import browser from './utils/browser';
-import { hasClass, toggleClass, trapFocus } from './utils/elements';
-import { on, triggerEvent } from './utils/events';
+import {
+    hasClass,
+    toggleClass,
+    trapFocus
+} from './utils/elements';
+import {
+    on,
+    triggerEvent
+} from './utils/events';
 import is from './utils/is';
 
 function onChange() {
@@ -35,7 +44,7 @@ function toggleFallback(toggle = false) {
     if (toggle) {
         this.scrollPosition = {
             x: window.scrollX || 0,
-            y: window.scrollY || 0,
+            y: window.scrollY || 0
         };
     } else {
         window.scrollTo(this.scrollPosition.x, this.scrollPosition.y);
@@ -92,7 +101,10 @@ class Fullscreen {
         this.property = Fullscreen.property;
 
         // Scroll position
-        this.scrollPosition = { x: 0, y: 0 };
+        this.scrollPosition = {
+            x: 0,
+            y: 0
+        };
 
         // Register event listeners
         // Handle event (incase user presses escape etc)
@@ -101,7 +113,7 @@ class Fullscreen {
             document,
             this.prefix === 'ms' ? 'MSFullscreenChange' : `${this.prefix}fullscreenchange`,
             () => {
-                // TODO: Filter for target??
+                // Filter for target??
                 onChange.call(this);
             },
         );
@@ -185,9 +197,9 @@ class Fullscreen {
 
     // Get target element
     get target() {
-        return browser.isIos && this.player.config.fullscreen.iosNative
-            ? this.player.media
-            : this.player.elements.container;
+        return browser.isIos && this.player.config.fullscreen.iosNative ?
+            this.player.media :
+            this.player.elements.container;
     }
 
     // Update UI

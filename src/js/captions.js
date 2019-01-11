@@ -5,7 +5,9 @@
 
 import controls from './controls';
 import support from './support';
-import { dedupe } from './utils/arrays';
+import {
+    dedupe
+} from './utils/arrays';
 import browser from './utils/browser';
 import {
     createElement,
@@ -13,14 +15,21 @@ import {
     getAttributesFromSelector,
     insertAfter,
     removeElement,
-    toggleClass,
+    toggleClass
 } from './utils/elements';
-import { on, triggerEvent } from './utils/events';
+import {
+    on,
+    triggerEvent
+} from './utils/events';
 import fetch from './utils/fetch';
 import i18n from './utils/i18n';
 import is from './utils/is';
-import { getHTML } from './utils/strings';
-import { parseUrl } from './utils/urls';
+import {
+    getHTML
+} from './utils/strings';
+import {
+    parseUrl
+} from './utils/urls';
 
 const captions = {
     // Setup captions
@@ -62,8 +71,7 @@ const captions = {
 
                 if (
                     url !== null &&
-                    url.hostname !== window.location.href.hostname &&
-                    ['http:', 'https:'].includes(url.protocol)
+                    url.hostname !== window.location.href.hostname && ['http:', 'https:'].includes(url.protocol)
                 ) {
                     fetch(src, 'blob')
                         .then(blob => {
@@ -95,14 +103,16 @@ const captions = {
 
         let active = this.storage.get('captions');
         if (!is.boolean(active)) {
-            ({ active } = this.config.captions);
+            ({
+                active
+            } = this.config.captions);
         }
 
         Object.assign(this.captions, {
             toggled: false,
             active,
             language,
-            languages,
+            languages
         });
 
         // Watch changes to textTracks and update captions menu
@@ -119,7 +129,12 @@ const captions = {
     update() {
         const tracks = captions.getTracks.call(this, true);
         // Get the wanted language
-        const { active, language, meta, currentTrackNode } = this.captions;
+        const {
+            active,
+            language,
+            meta,
+            currentTrackNode
+        } = this.captions;
         const languageExists = Boolean(tracks.find(track => track.language === language));
 
         // Handle tracks (add event listener and "pseudo"-default)
@@ -128,7 +143,7 @@ const captions = {
                 this.debug.log('Track added', track);
                 // Attempt to store if the original dom element was "default"
                 meta.set(track, {
-                    default: track.mode === 'showing',
+                    default: track.mode === 'showing'
                 });
 
                 // Turn off native caption rendering to avoid double captions
@@ -162,7 +177,9 @@ const captions = {
             return;
         }
 
-        const { toggled } = this.captions; // Current state
+        const {
+            toggled
+        } = this.captions; // Current state
         const activeClass = this.config.classNames.captions.active;
 
         // Get the next state
@@ -174,7 +191,9 @@ const captions = {
             // When passive, don't override user preferences
             if (!passive) {
                 this.captions.active = active;
-                this.storage.set({ captions: active });
+                this.storage.set({
+                    captions: active
+                });
             }
 
             // Force language if the call isn't passive and there is no matching language to toggle to
@@ -232,7 +251,9 @@ const captions = {
         if (this.captions.currentTrack !== index) {
             this.captions.currentTrack = index;
             const track = tracks[index];
-            const { language } = track || {};
+            const {
+                language
+            } = track || {};
 
             // Store reference to node for invalidation on remove
             this.captions.currentTrackNode = track;
@@ -243,7 +264,9 @@ const captions = {
             // When passive, don't override user preferences
             if (!passive) {
                 this.captions.language = language;
-                this.storage.set({ language });
+                this.storage.set({
+                    language
+                });
             }
 
             // Handle Vimeo captions
@@ -379,7 +402,7 @@ const captions = {
             // Trigger event
             triggerEvent.call(this, this.media, 'cuechange');
         }
-    },
+    }
 };
 
 export default captions;

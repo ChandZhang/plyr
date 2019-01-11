@@ -4,7 +4,9 @@
 
 export const pip = {
     active: 'picture-in-picture',
-    inactive: 'inline',
+    inactive: 'inline'
 };
 
-export default { pip };
+export default {
+    pip
+};

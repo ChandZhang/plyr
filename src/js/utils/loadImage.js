@@ -14,6 +14,10 @@ export default function loadImage(src, minWidth = 1) {
             (image.naturalWidth >= minWidth ? resolve : reject)(image);
         };
 
-        Object.assign(image, { onload: handler, onerror: handler, src });
+        Object.assign(image, {
+            onload: handler,
+            onerror: handler,
+            src
+        });
     });
 }

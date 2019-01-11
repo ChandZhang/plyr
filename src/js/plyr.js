@@ -110,26 +110,26 @@ class Plyr {
                 popup: null,
                 menu: null,
                 panels: {},
-                buttons: {},
-            },
+                buttons: {}
+            }
         };
 
         // Captions
         this.captions = {
             active: null,
             currentTrack: -1,
-            meta: new WeakMap(),
+            meta: new WeakMap()
         };
 
         // Fullscreen
         this.fullscreen = {
-            active: false,
+            active: false
         };
 
         // Options
         this.options = {
             speed: [],
-            quality: [],
+            quality: []
         };
 
         // Debugging
@@ -332,10 +332,10 @@ class Plyr {
         // Seek time will be recorded (in listeners.js) so we can prevent hiding controls for a few seconds after seek
         this.lastSeekTime = 0;
 
-        //****************************************************************************
+        // ****************************************************************************
         // FIXME: EXTEND startTime
         this.startTime = this.config.startTime || 0;
-        //****************************************************************************
+        // ****************************************************************************
     }
 
     // ---------------------------------------
@@ -735,7 +735,7 @@ class Plyr {
             !is.empty(input) && Number(input),
             this.storage.get('quality'),
             config.selected,
-            config.default,
+            config.default
         ].find(is.number);
 
         let updateStorage = true;
