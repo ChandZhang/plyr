@@ -7,10 +7,12 @@
 import Raven from 'raven-js';
 
 (() => {
-    const { host } = window.location;
+    const {
+        host
+    } = window.location;
     const env = {
         prod: host === 'plyr.io',
-        dev: host === 'dev.plyr.io',
+        dev: host === 'dev.plyr.io'
     };
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -21,8 +23,8 @@ import Raven from 'raven-js';
             if (window.shr) {
                 window.shr.setup({
                     count: {
-                        classname: 'button__count',
-                    },
+                        classname: 'button__count'
+                    }
                 });
             }
 
@@ -63,21 +65,21 @@ import Raven from 'raven-js';
                 title: 'View From A Blue Moon',
                 iconUrl: '../dist/plyr.svg',
                 keyboard: {
-                    global: true,
+                    global: true
                 },
                 tooltips: {
-                    controls: true,
+                    controls: true
                 },
                 captions: {
-                    active: true,
+                    active: true
                 },
                 keys: {
-                    google: 'AIzaSyDrNwtN3nLH_8rjCmu5Wq3ZCm4MNAVdc0c',
+                    google: 'AIzaSyDrNwtN3nLH_8rjCmu5Wq3ZCm4MNAVdc0c'
                 },
                 ads: {
                     enabled: env.prod || env.dev,
-                    publisherId: '918848828995742',
-                },
+                    publisherId: '918848828995742'
+                }
             });
 
             // Expose for tinkering in the console
@@ -89,7 +91,7 @@ import Raven from 'raven-js';
                 video: 'video',
                 audio: 'audio',
                 youtube: 'youtube',
-                vimeo: 'vimeo',
+                vimeo: 'vimeo'
             };
             let currentType = window.location.hash.replace('#', '');
             const historySupport = window.history && window.history.pushState;
@@ -117,44 +119,42 @@ import Raven from 'raven-js';
                         player.source = {
                             type: 'video',
                             title: 'View From A Blue Moon',
-                            sources: [
-                                {
+                            sources: [{
                                     src: 'https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4',
                                     type: 'video/mp4',
-                                    size: 576,
+                                    size: 576
                                 },
                                 {
                                     src: 'https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4',
                                     type: 'video/mp4',
-                                    size: 720,
+                                    size: 720
                                 },
                                 {
                                     src: 'https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4',
                                     type: 'video/mp4',
-                                    size: 1080,
+                                    size: 1080
                                 },
                                 {
                                     src: 'https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1440p.mp4',
                                     type: 'video/mp4',
-                                    size: 1440,
-                                },
+                                    size: 1440
+                                }
                             ],
                             poster: 'https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg',
-                            tracks: [
-                                {
+                            tracks: [{
                                     kind: 'captions',
                                     label: 'English',
                                     srclang: 'en',
                                     src: 'https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt',
-                                    default: true,
+                                    default: true
                                 },
                                 {
                                     kind: 'captions',
                                     label: 'French',
                                     srclang: 'fr',
-                                    src: 'https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt',
-                                },
-                            ],
+                                    src: 'https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt'
+                                }
+                            ]
                         };
 
                         break;
@@ -163,16 +163,15 @@ import Raven from 'raven-js';
                         player.source = {
                             type: 'audio',
                             title: 'Kishi Bashi &ndash; &ldquo;It All Began With A Burst&rdquo;',
-                            sources: [
-                                {
+                            sources: [{
                                     src: 'https://cdn.plyr.io/static/demo/Kishi_Bashi_-_It_All_Began_With_a_Burst.mp3',
-                                    type: 'audio/mp3',
+                                    type: 'audio/mp3'
                                 },
                                 {
                                     src: 'https://cdn.plyr.io/static/demo/Kishi_Bashi_-_It_All_Began_With_a_Burst.ogg',
-                                    type: 'audio/ogg',
-                                },
-                            ],
+                                    type: 'audio/ogg'
+                                }
+                            ]
                         };
 
                         break;
@@ -180,12 +179,10 @@ import Raven from 'raven-js';
                     case types.youtube:
                         player.source = {
                             type: 'video',
-                            sources: [
-                                {
-                                    src: 'https://youtube.com/watch?v=bTqVqk7FSmY',
-                                    provider: 'youtube',
-                                },
-                            ],
+                            sources: [{
+                                src: 'https://youtube.com/watch?v=bTqVqk7FSmY',
+                                provider: 'youtube'
+                            }]
                         };
 
                         break;
@@ -193,12 +190,10 @@ import Raven from 'raven-js';
                     case types.vimeo:
                         player.source = {
                             type: 'video',
-                            sources: [
-                                {
-                                    src: 'https://vimeo.com/76979871',
-                                    provider: 'vimeo',
-                                },
-                            ],
+                            sources: [{
+                                src: 'https://vimeo.com/76979871',
+                                provider: 'vimeo'
+                            }]
                         };
 
                         break;
@@ -231,7 +226,9 @@ import Raven from 'raven-js';
                     newSource(type);
 
                     if (historySupport) {
-                        window.history.pushState({ type }, '', `#${type}`);
+                        window.history.pushState({
+                            type
+                        }, '', `#${type}`);
                     }
                 });
             });
@@ -254,9 +251,8 @@ import Raven from 'raven-js';
 
                 // Replace current history state
                 if (currentType in types) {
-                    window.history.replaceState(
-                        {
-                            type: currentType,
+                    window.history.replaceState({
+                            type: currentType
                         },
                         '',
                         video ? '' : `#${currentType}`,
@@ -285,7 +281,7 @@ import Raven from 'raven-js';
             i.GoogleAnalyticsObject = r;
             i[r] =
                 i[r] ||
-                function() {
+                function () {
                     (i[r].q = i[r].q || []).push(arguments);
                 };
             i[r].l = 1 * new Date();

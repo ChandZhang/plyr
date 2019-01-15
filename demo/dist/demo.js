@@ -4352,5 +4352,3 @@ typeof navigator === "object" && (function () {
 	})();
 
 }());
-
-//# sourceMappingURL=demo.js.map

@@ -656,7 +656,7 @@ const controls = {
                         // FIXME: EXTEND Time is up
                         if ((this.currentTime === this.duration) || (this.currentTime - this.duration) >= 0.5) {
                             triggerEvent.call(this, this.media, 'ended');
-                            this.restart();
+                            this.stop();
                         }
                     }
 

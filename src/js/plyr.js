@@ -334,7 +334,7 @@ class Plyr {
 
         // ****************************************************************************
         // FIXME: EXTEND startTime
-        this.startTime = this.config.startTime || 0;
+        // this.startTime = this.config.startTime || 0;
         // ****************************************************************************
     }
 
@@ -474,12 +474,12 @@ class Plyr {
      * Seek to a time
      * @param {number} input - where to seek to in seconds. Defaults to 0 (the start)
      */
+    // FIXME: EXTEND currentTime
     set currentTime(input) {
         // Bail if media duration isn't available yet
         if (!this.duration) {
             return;
         }
-        // FIXME: EXTEND currentTime
         if (!this.media) {
             return;
         }
@@ -498,11 +498,31 @@ class Plyr {
      * Get current time
      */
     get currentTime() {
-        // FIXME: EXTEND currentTime
         if (!this.media) {
             return 0;
         }
         return Number(this.media.currentTime) - this.startTime;
+    }
+
+    /**
+     * set a start time of media
+     */
+    // FIXME: EXTEND startTime
+    set startTime(input) {
+        if (!this.duration) {
+            return;
+        }
+        if (!this.media) {
+            return;
+        }
+        // Validate input
+        const inputIsValid = is.number(input) && input > 0;
+        this.config.startTime = inputIsValid ? input : 0;
+        this.currentTime = this.media.currentTime - (inputIsValid ? input : 0);
+    }
+
+    get startTime() {
+        return this.config.startTime || 0;
     }
 
     /**
@@ -533,6 +553,16 @@ class Plyr {
      */
     get seeking() {
         return Boolean(this.media.seeking);
+    }
+
+    /**
+     * set a duration of media
+     */
+    // FIXME: add setter to duration
+    set duration(input) {
+        if (!this.config.duration) {
+            this.config.duration = input;
+        }
     }
 
     /**
@@ -835,8 +865,10 @@ class Plyr {
      * Set new media source
      * @param {object} input - The new source object (see docs)
      */
+    // FIXME: EXTEND reset current time after change soure
     set source(input) {
         source.change.call(this, input);
+        this.currentTime = 0;
     }
 
     /**

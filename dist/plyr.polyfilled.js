@@ -4818,9 +4818,9 @@ typeof navigator === "object" && (function (global, factory) {
             if (event.type === 'timeupdate') {
               controls.setRange.call(this, this.elements.inputs.seek, value); // FIXME: EXTEND Time is up
 
-              if (this.currentTime == this.duration || this.currentTime - this.duration >= 0.5) {
+              if (this.currentTime === this.duration || this.currentTime - this.duration >= 0.5) {
                 triggerEvent.call(this, this.media, 'ended');
-                this.restart();
+                this.stop();
               }
             }
 
@@ -5141,7 +5141,7 @@ typeof navigator === "object" && (function (global, factory) {
         });
     }, */
     // Get current selected caption language
-    // TODO: rework this to user the getter in the API?
+    // rework this to user the getter in the API?
     // Set a list of available captions languages
     setCaptionsMenu: function setCaptionsMenu() {
       var _this6 = this;
@@ -5149,7 +5149,7 @@ typeof navigator === "object" && (function (global, factory) {
       // Menu required
       if (!is$1.element(this.elements.settings.panels.captions)) {
         return;
-      } // TODO: Captions or language? Currently it's mixed
+      } // Captions or language? Currently it's mixed
 
 
       var type = 'captions';
@@ -5385,7 +5385,7 @@ typeof navigator === "object" && (function (global, factory) {
       button.setAttribute('href', this.download);
     },
     // Build the default HTML
-    // TODO: Set order based on order in the config.controls array?
+    // Set order based on order in the config.controls array?
     create: function create(data) {
       var _this9 = this;
 
@@ -5419,7 +5419,7 @@ typeof navigator === "object" && (function (global, factory) {
           id: "plyr-seek-".concat(data.id)
         })); // Buffer progress
 
-        progress.appendChild(controls.createProgress.call(this, 'buffer')); // TODO: Add loop display indicator
+        progress.appendChild(controls.createProgress.call(this, 'buffer')); // Add loop display indicator
         // Seek tooltip
 
         if (this.config.tooltips.seek) {
@@ -5506,7 +5506,7 @@ typeof navigator === "object" && (function (global, factory) {
         this.elements.settings.panels.home = home; // Build the menu items
 
         this.config.settings.forEach(function (type) {
-          // TODO: bundle this with the createMenuItem helper and bindings
+          // bundle this with the createMenuItem helper and bindings
           var menuItem = createElement('button', extend(getAttributesFromSelector(_this9.config.selectors.buttons.settings), {
             type: 'button',
             class: "".concat(_this9.config.classNames.control, " ").concat(_this9.config.classNames.control, "--forward"),
@@ -5674,7 +5674,7 @@ typeof navigator === "object" && (function (global, factory) {
           seektime: this.config.seekTime,
           speed: this.speed,
           quality: this.quality,
-          captions: captions.getLabel.call(this) // TODO: Looping
+          captions: captions.getLabel.call(this) // Looping
           // loop: 'None',
 
         });
@@ -6664,7 +6664,7 @@ typeof navigator === "object" && (function (global, factory) {
       // Handle event (incase user presses escape etc)
 
       on.call(this.player, document, this.prefix === 'ms' ? 'MSFullscreenChange' : "".concat(this.prefix, "fullscreenchange"), function () {
-        // TODO: Filter for target??
+        // Filter for target??
         onChange.call(_this2);
       }); // Fullscreen toggle on double click
 
@@ -6980,8 +6980,7 @@ typeof navigator === "object" && (function (global, factory) {
 
       this.media.setAttribute('poster', poster); // Wait until ui is ready
 
-      return ready.call(this) // Load image
-      .then(function () {
+      return ready.call(this).then(function () {
         return loadImage(poster);
       }).catch(function (err) {
         // Hide poster on error unless it's been set by another call
@@ -7043,7 +7042,7 @@ typeof navigator === "object" && (function (global, factory) {
     },
     // Toggle controls based on state and `force` argument
     toggleControls: function toggleControls(force) {
-      //FIXME: elements is undefined
+      // FIXME: elements is undefined
       if (!this.elements) {
         return;
       }
@@ -7390,7 +7389,7 @@ typeof navigator === "object" && (function (global, factory) {
         on.call(player, player.media, 'waiting canplay seeked playing', function (event) {
           return ui.checkLoading.call(player, event);
         }); // If autoplay, then load advertisement if required
-        // TODO: Show some sort of loading state while the ad manager loads else there's a delay before ad shows
+        // Show some sort of loading state while the ad manager loads else there's a delay before ad shows
 
         on.call(player, player.media, 'playing', function () {
           if (!player.ads) {
@@ -9925,10 +9924,10 @@ typeof navigator === "object" && (function (global, factory) {
       } // Seek time will be recorded (in listeners.js) so we can prevent hiding controls for a few seconds after seek
 
 
-      this.lastSeekTime = 0; //****************************************************************************
+      this.lastSeekTime = 0; // ****************************************************************************
       // FIXME: EXTEND startTime
-
-      this.startTime = this.config.startTime || 0; //****************************************************************************
+      // this.startTime = this.config.startTime || 0;
+      // ****************************************************************************
     } // ---------------------------------------
     // API
     // ---------------------------------------
@@ -10033,6 +10032,7 @@ typeof navigator === "object" && (function (global, factory) {
        * Seek to a time
        * @param {number} input - where to seek to in seconds. Defaults to 0 (the start)
        */
+      // FIXME: EXTEND currentTime
 
     }, {
       key: "increaseVolume",
@@ -10335,8 +10335,7 @@ typeof navigator === "object" && (function (global, factory) {
         // Bail if media duration isn't available yet
         if (!this.duration) {
           return;
-        } // FIXME: EXTEND currentTime
-
+        }
 
         if (!this.media) {
           return;
@@ -10354,12 +10353,35 @@ typeof navigator === "object" && (function (global, factory) {
        */
       ,
       get: function get() {
-        // FIXME: EXTEND currentTime
         if (!this.media) {
           return 0;
         }
 
         return Number(this.media.currentTime) - this.startTime;
+      }
+      /**
+       * set a start time of media
+       */
+      // FIXME: EXTEND startTime
+
+    }, {
+      key: "startTime",
+      set: function set(input) {
+        if (!this.duration) {
+          return;
+        }
+
+        if (!this.media) {
+          return;
+        } // Validate input
+
+
+        var inputIsValid = is$1.number(input) && input > 0;
+        this.config.startTime = inputIsValid ? input : 0;
+        this.currentTime = this.media.currentTime - (inputIsValid ? input : 0);
+      },
+      get: function get() {
+        return this.config.startTime || 0;
       }
       /**
        * Get buffered
@@ -10393,11 +10415,21 @@ typeof navigator === "object" && (function (global, factory) {
         return Boolean(this.media.seeking);
       }
       /**
-       * Get the duration of the current media
+       * set a duration of media
        */
+      // FIXME: add setter to duration
 
     }, {
       key: "duration",
+      set: function set(input) {
+        if (!this.config.duration) {
+          this.config.duration = input;
+        }
+      }
+      /**
+       * Get the duration of the current media
+       */
+      ,
       get: function get() {
         // Faux duration set via config
         var fauxDuration = parseFloat(this.config.duration); // Media duration can be NaN or Infinity before the media has loaded
@@ -10658,11 +10690,13 @@ typeof navigator === "object" && (function (global, factory) {
        * Set new media source
        * @param {object} input - The new source object (see docs)
        */
+      // FIXME: EXTEND reset current time after change soure
 
     }, {
       key: "source",
       set: function set(input) {
         source.change.call(this, input);
+        this.currentTime = 0;
       }
       /**
        * Get current source
@@ -10862,5 +10896,3 @@ typeof navigator === "object" && (function (global, factory) {
   return Plyr;
 
 })));
-
-//# sourceMappingURL=plyr.polyfilled.js.map
