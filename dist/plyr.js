@@ -3191,9 +3191,9 @@ typeof navigator === "object" && (function (global, factory) {
     // Sprite (for icons)
     loadSprite: true,
     iconPrefix: 'plyr',
-    iconUrl: './plyr/plyr.svg',
+    iconUrl: '../plyr.svg',
     // Blank video (used to prevent errors on source change)
-    blankVideo: './plyr/blank.mp4',
+    blankVideo: '../blank.mp4',
     // Quality default
     quality: {
       default: 720,
